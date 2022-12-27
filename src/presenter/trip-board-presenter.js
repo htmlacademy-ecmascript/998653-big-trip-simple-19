@@ -1,9 +1,8 @@
-//import CreateFormView from '../view/create-form-view.js';
-//import EditFormView from '../view/edit-form-view.js';
-import FilterView from '../view/filters-view.js';
-import TripPointInListView from '../view/trip-point-view.js';
-import TripListView from '../view/trip-list-view.js';
-import SortView from '../view/sort-view.js';
+import TripEditFormView from '../view/edit-form-view.js';
+import TripFiltersView from '../view/trip-filters-view.js';
+import TripPointView from '../view/trip-point-view.js';
+import TripListView from '../view/trip-events-view.js';
+import TripSortView from '../view/trip-sort-view.js';
 import { render } from '../render.js';
 
 // создадим отдельные вьюшки  с помощью класса
@@ -11,20 +10,19 @@ export default class BoardPresenter {
   tripListComponent = new TripListView();
 
   //foo создающая экземпляр класса
-  constructor({ filterContainer, sortContainer }) {
+  constructor({ filterContainer, contentContainer }) {
     this.filterContainer = filterContainer;
-    this.sortContainer = sortContainer;
+    this.contentContainer = contentContainer;
   }
 
   //создаем вьюшки = экземпляры компонентов
   init() {
+    render(new TripFiltersView(), this.filterContainer);
+    render(new TripSortView(), this.contentContainer);
+    render(new TripEditFormView(), this.contentContainer);
+    render(this.tripListComponent, this.contentContainer);
     for (let i = 0; i < 3; i++) {
-      render(new TripPointInListView(), this.tripListComponent.getElement()); //почему нет i?
+      render(new TripPointView(), this.tripListComponent.getElement());
     }
-    //render(new CreateFormView(), куда будет отрисавана форма => <section class="trip-events">?)
-    //render(new EditFormView() ,куда будет отрисавана форма => <section class="trip-events">?)
-    render(new FilterView(), this.filterContainer);
-    render(new SortView(), this.sortContainer);
-    render(this.tripListComponent, this.sortContainer);
   }
 }
