@@ -10,19 +10,33 @@ export default class BoardPresenter {
   tripListComponent = new TripListView();
 
   //foo создающая экземпляр класса
-  constructor({ filterContainer, contentContainer }) {
+  constructor({ filterContainer, contentContainer, pointModel }) {
     this.filterContainer = filterContainer;
     this.contentContainer = contentContainer;
+    this.pointModel = pointModel; // пояснить запись
   }
 
   //создаем вьюшки = экземпляры компонентов
   init() {
+    //создадим свойство .point куда запишем, что вернул метод .getPoint()
+    // при помощи spread копируем вернувшмйся массив задач из модели => в презентер
+
+    // переносим данные из модели в презентер??? = новый массив
+
+    this.points = [...this.PointModel.getPoint()]; // в метод .point записали массив из модели?
+
     render(new TripFiltersView(), this.filterContainer);
     render(new TripSortView(), this.contentContainer);
     render(new TripEditFormView(), this.contentContainer);
-    render(this.tripListComponent, this.contentContainer);
+    render(this.tripListComponent(), this.contentContainer);
+
+    //задача  с нулевыми значениями
+
     for (let i = 0; i < 3; i++) {
-      render(new TripPointView(), this.tripListComponent.getElement());
+      render(
+        new TripPointView({ poit: this.points[i] }),
+        this.tripListComponent.getElement()
+      );
     }
   }
 }
