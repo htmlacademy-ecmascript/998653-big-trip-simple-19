@@ -1,13 +1,22 @@
 import { createElement } from '../render.js';
 import {
-  getRandomArrayElement,
-  getRandomInt,
   humanizePointCurrentDatebyHtml,
-  humanizePointCurrentDateTimebyForm,
   humanizePointCurrentDate,
+  humanizePointCurrentTime,
 } from '../utils.js';
 
-function createTripPointView() {
+//отрисовка списка доп опций
+function createTripOffersList() {
+  
+  //откуда этот фрагмент верстки?
+  return (`<li class="event__offer">
+  <span class="event__offer-title">${offer.title}</span>
+  &plus;&euro;&nbsp;
+  <span class="event__offer-price">${offer.price}</span>
+</li>`);
+}
+
+function createTripPointView(point) {
   //извлекаем из объекта описания точки ключи, которыми можно сразу воспользоваться
   const { price, start, end, destination, offer, type } = point;
 

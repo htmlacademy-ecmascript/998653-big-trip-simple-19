@@ -8,3 +8,5 @@ export default class PointModel {
     return this.points; // this = текущий объект? Что мы вернули? метод? массив? Или - возвращаем метод, который в любом объекте/классе - будет генерировать массив?
   }
 }
+
+// console.log(PointModel);

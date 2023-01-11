@@ -37,6 +37,7 @@ export {
   humanizePointCurrentDatebyHtml,
   humanizePointCurrentDateTimebyForm,
   humanizePointCurrentDate,
+  humanizePointCurrentTime,
 };
 
 // const date = new Date();
