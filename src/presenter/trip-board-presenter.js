@@ -3,7 +3,6 @@ import TripFiltersView from '../view/trip-filters-view.js';
 import TripPointView from '../view/trip-point-view.js';
 import TripListView from '../view/trip-events-view.js';
 import TripSortView from '../view/trip-sort-view.js';
-import PointModel from '../model/points-model.js';
 import { render } from '../render.js';
 
 // создадим отдельные вьюшки  с помощью класса

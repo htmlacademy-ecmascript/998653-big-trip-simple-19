@@ -1,35 +1,27 @@
 import dayjs from 'dayjs';
-import { DATA_TIME_FORMAT } from './constants/data-time-format.js';
+import { DATA_TIME_FORMAT } from './constans.js';
 
-function getRandomInt() {
-  return Math.random();
-}
+const getRandomInt = (min, max) => {
+  const rand = min - 0.5 + Math.random() * (max - min + 1);
+  return Math.round(rand);
+};
 
-function getRandomArrayElement(items) {
-  return items[Math.floor(Math.random() * items.length)];
-}
+const getRandomArrayElement = (items) =>
+  items[Math.floor(Math.random() * items.length)];
 
-function humanizePointCurrentDatebyHtml(currentDate) {
-  return currentDate ? dayjs(currentDate).format(DATA_TIME_FORMAT.HTML) : '';
-}
+const humanizePointCurrentDatebyHtml = (currentDate) =>
+  currentDate ? dayjs(currentDate).format(DATA_TIME_FORMAT.HTML) : '';
 
-function humanizePointCurrentDateTimebyForm(currentDate) {
-  return currentDate
+const humanizePointCurrentDateTimebyForm = (currentDate) =>
+  currentDate
     ? dayjs(currentDate).format(DATA_TIME_FORMAT.POINT_DATE_TIME_FORM)
     : '';
-}
 
-function humanizePointCurrentDate(currentDate) {
-  return currentDate
-    ? dayjs(currentDate).format(DATA_TIME_FORMAT.POINT_DATE)
-    : '';
-}
+const humanizePointCurrentDate = (currentDate) =>
+  currentDate ? dayjs(currentDate).format(DATA_TIME_FORMAT.POINT_DATE) : '';
 
-function humanizePointCurrentTime(currentDate) {
-  return currentDate
-    ? dayjs(currentDate).format(DATA_TIME_FORMAT.POINT_TIME)
-    : '';
-}
+const humanizePointCurrentTime = (currentDate) =>
+  currentDate ? dayjs(currentDate).format(DATA_TIME_FORMAT.POINT_TIME) : '';
 
 export {
   getRandomArrayElement,
