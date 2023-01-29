@@ -10,24 +10,24 @@ import {
 
 function createTripPointView(point) {
  //извлекаем из объекта описания точки ключи, которыми можно сразу воспользоваться
- const { price, start, end, destination, type } = point;
+ const { basePrice,dateFrom ,dateTo, destination, type } = point;
 
  return `<li class="trip-events__item">
   <div class="event">
-    <time class="event__date" datetime=${humanizePointCurrentDatebyHtml(start)}>${humanizePointCurrentDate(start)}</time>
+    <time class="event__date" datetime=${humanizePointCurrentDatebyHtml(dateFrom)}>${humanizePointCurrentDate(dateFrom)}</time>
     <div class="event__type">
       <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
     </div>
-    <h3 class="event__title">${type} ${destination.name}</h3>
+    <h3 class="event__title">${type} ${destination}</h3>
     <div class="event__schedule">
       <p class="event__time">
-        <time class="event__start-time" datetime= ${humanizePointCurrentDatebyHtml(start)}>${humanizePointCurrentTime(start)}</time>
+        <time class="event__start-time" datetime= ${humanizePointCurrentDatebyHtml(dateFrom)}>${humanizePointCurrentTime(dateFrom)}</time>
         —
-        <time class="event__end-time" datetime= ${humanizePointCurrentDatebyHtml(end)}>${humanizePointCurrentTime(end)}</time>
+        <time class="event__end-time" datetime= ${humanizePointCurrentDatebyHtml(dateTo)}>${humanizePointCurrentTime(dateTo)}</time>
       </p>
     </div>
     <p class="event__price">
-      €&nbsp;<span class="event__price-value">${price}</span>
+      €&nbsp;<span class="event__price-value">${basePrice}</span>
     </p>
 
     <h4 class="visually-hidden">Offers:</h4>

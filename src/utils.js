@@ -32,5 +32,4 @@ export {
   humanizePointCurrentTime,
 };
 
-// const date = new Date();
-// console.log(humanizePointCurrentTime(date));
+

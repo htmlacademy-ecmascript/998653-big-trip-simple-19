@@ -1,9 +1,9 @@
 import { getRandomArrayElement } from '../utils.js';
 import { getRandomInt } from '../utils.js';
 import {PointType} from '../constans.js';
+import dayjs from 'dayjs';
 
 const POINTS_COUNT = 15;
-
 const CITIES = [
   'Vienna',
   'Tirana',
@@ -69,8 +69,8 @@ const getRandomOffer = (index) => ({
 const getPoint = (index) => ({
   id: index + 1 ,
   basePrice: getRandomInt(100, 2000),
-  dateFrom: '2019-07-10T22:55:56.845Z',
-  dateTo: '2019-07-11T11:22:13.375Z',
+  dateFrom: dayjs(),
+  dateTo: dayjs().hour(3) ,
   destination: getRandomArrayElement(CITIES),
   offers: getRandomOffer(),
   type: getRandomType(),

@@ -1,19 +1,23 @@
-import TripEditFormView from '../view/edit-form-view.js';
+import TripEditFormView from '../view/trip-edit-form-view.js';
 import TripFiltersView from '../view/trip-filters-view.js';
 import TripPointView from '../view/trip-point-view.js';
-import TripListView from '../view/trip-events-view.js';
+import TripListView from '../view/trip-list-view.js';
 import TripSortView from '../view/trip-sort-view.js';
 import { render } from '../render.js';
 
 // создадим отдельные вьюшки  с помощью класса
 export default class BoardPresenter {
   tripListComponent = new TripListView();
+  #filtersContainer = undefined;
+  #tripEventsContainer = undefined;
+  #pointModel = undefined;
+
 
   //foo создающая экземпляр класса
-  constructor({ filterContainer, contentContainer, pointModel }) {
-    this.filterContainer = filterContainer;
-    this.contentContainer = contentContainer;
-    this.pointModel = pointModel; // пояснить запись
+  constructor({ filtersContainer, tripEventsContainer, pointModel }) {
+    this.#filtersContainer = filtersContainer;
+    this.#tripEventsContainer = tripEventsContainer;
+    this.#pointModel = pointModel; // пояснить запись
   }
 
   //создаем вьюшки = экземпляры компонентов
@@ -23,18 +27,18 @@ export default class BoardPresenter {
 
     // переносим данные из модели в презентер??? = новый массив - ОШИБКА_ не могу понять почему)
 
-    this.points = [...this.pointModel.getPoint()]; // в метод .point записали массив из модели? ОБЪЯСНИТЬ))
+    const points = [...this.#pointModel.getPoint()]; // в метод .point записали массив из модели? ОБЪЯСНИТЬ))
 
-    render(new TripFiltersView(), this.filterContainer);
-    render(new TripSortView(), this.contentContainer);
-    render(new TripEditFormView(), this.contentContainer);
-    render(this.tripListComponent(), this.contentContainer);
+    render(new TripFiltersView(), this.#filtersContainer);
+    render(new TripSortView(), this.#tripEventsContainer);
+    render(new TripEditFormView(), this.#tripEventsContainer);
+    render(this.tripListComponent, this.#tripEventsContainer);
 
     //задача  с нулевыми значениями
 
     for (let i = 0; i < 3; i++) {
       render(
-        new TripPointView({ poit: this.points[i] }),
+        new TripPointView({ point: points[i] }),
         this.tripListComponent.getElement()
       );
     }

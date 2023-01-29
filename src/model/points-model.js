@@ -1,23 +1,13 @@
-import { getPoints } from '../mock/point.js';
-
 export default class PointModel {
-  points = getPoints;
+  #points = [];
 
   getPoint() {
-    return this.points; // this = текущий объект? Что мы вернули? метод? массив? Или - возвращаем метод, который в любом объекте/классе - будет генерировать массив?
+    return this.#points; // this = текущий объект? Что мы вернули? метод? массив? Или - возвращаем метод, который в любом объекте/классе - будет генерировать массив?
+  }
+
+  init(points) {
+    this.#points = points;
   }
 }
 
-// console.log(PointModel);
 
-// export default class PointsModel {
-//   _pointStore = [];
-
-//   get points(){
-//     return this._pointStore;
-//   }
-
-//   init(points) {
-//     this._pointStore = points;
-//   }
-// }
