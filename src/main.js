@@ -5,8 +5,6 @@ import { getDestinations } from './mock/point.js';
 
 const points = getPoints();
 const destinations = getDestinations();
-console.log(destinations);
-
 
 const filtersContainer = document.querySelector('.trip-controls__filters');
 const tripEventsContainer = document.querySelector('.trip-events');
