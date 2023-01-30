@@ -71,7 +71,7 @@ const getPoint = (index) => ({
   basePrice: getRandomInt(100, 2000),
   dateFrom: dayjs(),
   dateTo: dayjs().hour(3) ,
-  destination: getRandomArrayElement(CITIES),
+  city: getRandomArrayElement(CITIES),
   offers: getRandomOffer(),
   type: getRandomType(),
 });
@@ -91,4 +91,4 @@ const getDestination = (index) => ({
 });
 
 const getDestinations = () => Array.from({length: POINTS_COUNT}, (_, index) => getDestination(index));
-export { getPoints, getDestinations };
+export { getPoints, getDestinations, getRandomOffer };

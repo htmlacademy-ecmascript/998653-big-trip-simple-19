@@ -33,3 +33,6 @@ export {
 };
 
 
+const date = new Date();
+// eslint-disable-next-line no-console
+console.log(humanizePointCurrentDatebyHtml(date));

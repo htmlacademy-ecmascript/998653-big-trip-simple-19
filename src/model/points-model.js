@@ -1,13 +1,19 @@
 export default class PointModel {
   #points = [];
+  #destinations = [];
+
 
   getPoint() {
-    return this.#points; // this = текущий объект? Что мы вернули? метод? массив? Или - возвращаем метод, который в любом объекте/классе - будет генерировать массив?
+    return this.#points;
   }
 
-  init(points) {
+  getDestination() {
+    return this.#destinations;
+  }
+
+  init(points, destinations) {
     this.#points = points;
+    this.#destinations = destinations;
   }
 }
-
 
