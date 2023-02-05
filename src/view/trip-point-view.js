@@ -1,13 +1,10 @@
 /* eslint-disable indent */
 import { createElement } from '../render.js';
-import {getRandomOffer} from '../mock/point.js';
 import {
  humanizePointCurrentDatebyHtml,
  humanizePointCurrentDate,
  humanizePointCurrentTime,
 } from '../utils.js';
-
-//отрисовка списка доп опций
 
 function createTripPointView(point) {
  //извлекаем из объекта описания точки ключи, которыми можно сразу воспользоваться
@@ -35,9 +32,9 @@ function createTripPointView(point) {
     <h4 class="visually-hidden">Offers:</h4>
     <ul class="event__selected-offers">
       <li class="event__offer">
-        <span class="event__offer-title">${getRandomOffer().title}</span>
+        <span class="event__offer-title">Name</span>
         +€&nbsp;
-        <span class="event__offer-price">${getRandomOffer().price}</span>
+        <span class="event__offer-price">Prices</span>
       </li>
     </ul>
     <button class="event__rollup-btn" type="button">

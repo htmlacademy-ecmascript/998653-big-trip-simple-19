@@ -1,7 +1,12 @@
 export default class PointModel {
+  #offersByType = [];
   #points = [];
   #destinations = [];
 
+
+  getOffersByType() {
+    return this.#offersByType;
+  }
 
   getPoint() {
     return this.#points;
@@ -11,7 +16,8 @@ export default class PointModel {
     return this.#destinations;
   }
 
-  init(points, destinations) {
+  init(offersByType, points, destinations) {
+    this.#offersByType = offersByType;
     this.#points = points;
     this.#destinations = destinations;
   }

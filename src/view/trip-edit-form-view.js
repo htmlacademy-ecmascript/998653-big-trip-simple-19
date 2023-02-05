@@ -1,10 +1,14 @@
 import { createElement } from '../render.js';
-import {humanizePointCurrentDateTimebyForm, humanizePointCurrentTime} from '../utils.js';
-import {getRandomOffer} from '../mock/point.js';
+import { humanizePointCurrentDateTimebyForm, humanizePointCurrentTime} from '../utils.js';
+import { PointType, PointTypeDescription} from '../constans.js';
 
-function createTripEditFormView(point, destination) {
-  const { basePrice,dateFrom ,dateTo, city, type } = point;
-  const {description, name} = destination;
+
+function createTripEditFormView(offersByType, point, destinations) {
+  const { basePrice, dateFrom, dateTo, city, offers, type } = point;
+  const currentDestination = destinations.find((x) => x.name === city);
+  const availableOffers = offersByType.find((x) => x.type === type).offers;
+
+
   return `<form class="event event--edit" action="#" method="post">
   <header class="event__header">
     <div class="event__type-wrapper">
@@ -17,52 +21,13 @@ function createTripEditFormView(point, destination) {
       <div class="event__type-list">
         <fieldset class="event__type-group">
           <legend class="visually-hidden">Event type</legend>
+O
+         ${Object.values(PointType).map((pointType) => (`<div class="event__type-item">
+         <input id="event-type-${pointType}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value=${pointType} ${pointType === type ? 'checked' : ''}>
+         <label class="event__type-label  event__type-label--${pointType}" for="event-type-taxi-1">${PointTypeDescription[pointType]}</label>
+       </div>`)).join('')}
 
-          <div class="event__type-item">
-            <input id="event-type-taxi-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="taxi">
-            <label class="event__type-label  event__type-label--taxi" for="event-type-taxi-1">Taxi</label>
-          </div>
-
-          <div class="event__type-item">
-            <input id="event-type-bus-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="bus">
-            <label class="event__type-label  event__type-label--bus" for="event-type-bus-1">Bus</label>
-          </div>
-
-          <div class="event__type-item">
-            <input id="event-type-train-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="train">
-            <label class="event__type-label  event__type-label--train" for="event-type-train-1">Train</label>
-          </div>
-
-          <div class="event__type-item">
-            <input id="event-type-ship-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="ship">
-            <label class="event__type-label  event__type-label--ship" for="event-type-ship-1">Ship</label>
-          </div>
-
-          <div class="event__type-item">
-            <input id="event-type-drive-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="drive">
-            <label class="event__type-label  event__type-label--drive" for="event-type-drive-1">Drive</label>
-          </div>
-
-          <div class="event__type-item">
-            <input id="event-type-flight-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="flight" checked="">
-            <label class="event__type-label  event__type-label--flight" for="event-type-flight-1">Flight</label>
-          </div>
-
-          <div class="event__type-item">
-            <input id="event-type-check-in-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="check-in">
-            <label class="event__type-label  event__type-label--check-in" for="event-type-check-in-1">Check-in</label>
-          </div>
-
-          <div class="event__type-item">
-            <input id="event-type-sightseeing-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="sightseeing">
-            <label class="event__type-label  event__type-label--sightseeing" for="event-type-sightseeing-1">Sightseeing</label>
-          </div>
-
-          <div class="event__type-item">
-            <input id="event-type-restaurant-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="restaurant">
-            <label class="event__type-label  event__type-label--restaurant" for="event-type-restaurant-1">Restaurant</label>
-          </div>
-        </fieldset>
+</fieldset>
       </div>
     </div>
 
@@ -72,9 +37,7 @@ function createTripEditFormView(point, destination) {
       </label>
       <input class="event__input  event__input--city" id="event-city-1" type="text" name="event-city" value=${city} list="city-list-1">
       <datalist id="city-list-1">
-        <option value=${city}></option>
-        <option value=${city}></option>
-        <option value=${city}></option>
+      ${destinations.map((destination) =>(`<option value=${destination.name}></option>`))}
       </datalist>
     </div>
 
@@ -97,61 +60,28 @@ function createTripEditFormView(point, destination) {
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
     <button class="event__reset-btn" type="reset">Cancel</button>
   </header>
+
   <section class="event__details">
-    <section class="event__section  event__section--offers">
-      <h3 class="event__section-title  event__section-title--offers">Offers</h3>
 
-      <div class="event__available-offers">
-        <div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked="">
-          <label class="event__offer-label" for="event-offer-luggage-1">
-            <span class="event__offer-title">${getRandomOffer().title}</span>
-            +€&nbsp;
-            <span class="event__offer-price">/${getRandomOffer().price}</span>
-          </label>
-        </div>
+  ${availableOffers.length > 0 ? `<section class="event__section        event__section--offers">
+  <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+  ${availableOffers.map((offer) => (
+    `<div class="event__available-offers">
+  <div class="event__offer-selector">
+  <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked="">
+  <label class="event__offer-label" for="event-offer-luggage-1">
+  <span class="event__offer-title">${offer.title}</span>
+  +€&nbsp;
+  <span class="event__offer-price">${offer.price}</span>
+ </label>
+</div>
+</div>`)).join('')}
 
-        <div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" checked="">
-          <label class="event__offer-label" for="event-offer-comfort-1">
-            <span class="event__offer-title">${getRandomOffer().title}</span>
-            +€&nbsp;
-            <span class="event__offer-price">${getRandomOffer().price}</span>
-          </label>
-        </div>
+</section>` : ''}
 
-        <div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-meal-1" type="checkbox" name="event-offer-meal">
-          <label class="event__offer-label" for="event-offer-meal-1">
-            <span class="event__offer-title">${getRandomOffer().title}</span>
-            +€&nbsp;
-            <span class="event__offer-price">${getRandomOffer().price}</span>
-          </label>
-        </div>
-
-        <div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-seats-1" type="checkbox" name="event-offer-seats">
-          <label class="event__offer-label" for="event-offer-seats-1">
-            <span class="event__offer-title">${getRandomOffer().title}</span>
-            +€&nbsp;
-            <span class="event__offer-price">${getRandomOffer().price}</span>
-          </label>
-        </div>
-
-        <div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train">
-          <label class="event__offer-label" for="event-offer-train-1">
-            <span class="event__offer-title">${getRandomOffer().title}</span>
-            +€&nbsp;
-            <span class="event__offer-price">${getRandomOffer().price}</span>
-          </label>
-        </div>
-      </div>
-    </section>
-
-    <section class="event__section  event__section--city">
-      <h3 class="event__section-title  event__section-title--city">city</h3>
-      <p class="event__destination-description"> ${name} ${description}</p>
+<section class="event__section  event__section--destination">
+      <h3 class="event__section-title  event__section-title--destination">Destination</h3>
+      <p class="event__destination-description"> ${currentDestination.description}</p>
 
       <div class="event__photos-container">
         <div class="event__photos-tape">
@@ -169,13 +99,15 @@ function createTripEditFormView(point, destination) {
 
 export default class TripEditFormView {
   element = null;
-  constructor({point, destination }) {
+  constructor({offersByType, point, destinations }) {
+    this.offersByType = offersByType;
     this.point = point;
-    this.destination = destination;
+    this.destinations = destinations;
+
   }
 
   getTemplate() {
-    return createTripEditFormView(this.point, this.destination);
+    return createTripEditFormView(this.offersByType, this.point, this.destinations);
   }
 
   getElement() {

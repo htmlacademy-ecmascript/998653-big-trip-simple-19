@@ -10,12 +10,24 @@ export { DATA_TIME_FORMAT };
 const PointType = {
   Taxi: 'taxi',
   Bus:'bus',
-  train: 'train',
+  Train: 'train',
   Ship: 'ship',
   Drive:'drive',
   Flight:'flight',
   CheckIn: 'check-in',
-  Cightseeing:'sightseeing',
-  restaurant:'restaurant'};
+  Sightseeing:'sightseeing',
+  Restaurant:'restaurant'};
 
-export { PointType };
+const PointTypeDescription = {
+  [PointType.Taxi]: 'Taxi',
+  [PointType.Bus]: 'Bus',
+  [PointType.Train]: 'Train',
+  [PointType.Ship]: 'Ship',
+  [PointType.Drive]: 'Drive',
+  [PointType.Flight]: 'Flight',
+  [PointType.CheckIn]: 'CheckIn',
+  [PointType.Sightseeing]: 'Sightseeing',
+  [PointType.Restaurant]: 'Restaurant',
+};
+
+export { PointType, PointTypeDescription};

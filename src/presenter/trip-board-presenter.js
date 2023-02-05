@@ -18,12 +18,14 @@ export default class BoardPresenter {
   }
 
   init() {
+    const offersByType = [...this.#pointModel.getOffersByType()];
     const points = [...this.#pointModel.getPoint()];
     const destinations = [...this.#pointModel.getDestination()];
 
+
     render(new TripFiltersView(), this.#filtersContainer);
     render(new TripSortView(), this.#tripEventsContainer);
-    render(new TripEditFormView({point: points[0]}, {destination: destinations[0]}), this.#tripEventsContainer);
+    render(new TripEditFormView({offersByType, point: points[0], destinations: destinations}), this.#tripEventsContainer);
     render(this.tripListComponent, this.#tripEventsContainer);
 
     for (let i = 1; i < points.length; i++) {
