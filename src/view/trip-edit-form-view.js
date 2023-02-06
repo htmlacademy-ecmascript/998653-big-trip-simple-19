@@ -68,7 +68,7 @@ O
   ${availableOffers.map((offer) => (
     `<div class="event__available-offers">
   <div class="event__offer-selector">
-  <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked="">
+  <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" ${offers.some((offerId) => offer.id === offerId) ? 'checked' : ''}checked>
   <label class="event__offer-label" for="event-offer-luggage-1">
   <span class="event__offer-title">${offer.title}</span>
   +€&nbsp;
@@ -85,11 +85,8 @@ O
 
       <div class="event__photos-container">
         <div class="event__photos-tape">
-          <img class="event__photo" src="img/photos/1.jpg" alt="Event photo">
-          <img class="event__photo" src="img/photos/2.jpg" alt="Event photo">
-          <img class="event__photo" src="img/photos/3.jpg" alt="Event photo">
-          <img class="event__photo" src="img/photos/4.jpg" alt="Event photo">
-          <img class="event__photo" src="img/photos/5.jpg" alt="Event photo">
+        ${currentDestination.pictures.map((picture) => (`<img class="event__photo" src= ${picture.src} alt=${picture.description}>`)).join('')}
+
         </div>
       </div>
     </section>

@@ -1,16 +1,25 @@
-/* eslint-disable indent */
 import { createElement } from '../render.js';
 import {
- humanizePointCurrentDatebyHtml,
- humanizePointCurrentDate,
- humanizePointCurrentTime,
+  humanizePointCurrentDatebyHtml,
+  humanizePointCurrentDate,
+  humanizePointCurrentTime,
 } from '../utils.js';
 
-function createTripPointView(point) {
- //извлекаем из объекта описания точки ключи, которыми можно сразу воспользоваться
- const { basePrice,dateFrom ,dateTo, city, type } = point;
+function createTripPointView(offersByType, point) {
+  const { basePrice,dateFrom ,dateTo, city, offers, type } = point;
 
- return `<li class="trip-events__item">
+  //найти по типу доступные офферы ???
+  const availableOffers = offersByType.find((x) => x.type === type).offers; //почему андефайнд? как понять, что правый type - именно от point?
+
+  //из этих оферов взять те айдишник которого есть в офферсах нашего пойнта ????
+
+  //filter - создает новый массив из элементов, прошедших проверку в СB
+
+  //some - проверяет - удовлетворяет  элемент массива условию, заданному в CB
+  const currentOffers = availableOffers.filter((x) => offers.some((y) => y === x.id));
+
+
+  return `<li class="trip-events__item">
   <div class="event">
     <time class="event__date" datetime=${humanizePointCurrentDatebyHtml(dateFrom)}>${humanizePointCurrentDate(dateFrom)}</time>
     <div class="event__type">
@@ -32,9 +41,9 @@ function createTripPointView(point) {
     <h4 class="visually-hidden">Offers:</h4>
     <ul class="event__selected-offers">
       <li class="event__offer">
-        <span class="event__offer-title">Name</span>
-        +€&nbsp;
-        <span class="event__offer-price">Prices</span>
+       ${currentOffers.length > 0 ? currentOffers.map((offer) => (`<span class="event__offer-title">${offer.title}</span>
+       +€&nbsp;
+       <span class="event__offer-price">${offer.price}</span>`)).join('') : '<span class="event__offer-title">No additional offers</span>'}
       </li>
     </ul>
     <button class="event__rollup-btn" type="button">
@@ -45,24 +54,26 @@ function createTripPointView(point) {
 }
 
 export default class TripPointView {
- element = null;
- //извлекаем объект с описанием задачи с помощью деструктуризации
- constructor({ point }) {
-  this.point = point; // ?ЧТО И КУДА ПЕРЕДАЕМ - НЕ ПОНИМАЮ)
- }
+  element = null;
 
- getTemplate() {
-  return createTripPointView(this.point);
- }
-
- getElement() {
-  if (!this.element) {
-   this.element = createElement(this.getTemplate());
+  constructor({ offersByType, point }) {
+    this.point = point;
+    this.offersByType = offersByType;
   }
-  return this.element;
- }
 
- removeElement() {
-  this.element = null;
- }
+  getTemplate() {
+    return createTripPointView(this.offersByType, this.point);
+  }
+
+  getElement() {
+    if (!this.element) {
+      this.element = createElement(this.getTemplate());
+    }
+
+    return this.element;
+  }
+
+  removeElement() {
+    this.element = null;
+  }
 }
