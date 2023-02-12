@@ -6,7 +6,8 @@ import { PointType, PointTypeDescription} from '../constans.js';
 function createTripEditFormView(offersByType, point, destinations) {
   const { basePrice, dateFrom, dateTo, city, offers, type } = point;
   const currentDestination = destinations.find((x) => x.name === city);
-  const availableOffers = offersByType.find((x) => x.type === type).offers;
+  const currentOffers = offersByType.find((x) => x.type === type);
+  const availableOffers = currentOffers ? currentOffers.offers : [];
 
 
   return `<form class="event event--edit" action="#" method="post">
@@ -21,7 +22,6 @@ function createTripEditFormView(offersByType, point, destinations) {
       <div class="event__type-list">
         <fieldset class="event__type-group">
           <legend class="visually-hidden">Event type</legend>
-O
          ${Object.values(PointType).map((pointType) => (`<div class="event__type-item">
          <input id="event-type-${pointType}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value=${pointType} ${pointType === type ? 'checked' : ''}>
          <label class="event__type-label  event__type-label--${pointType}" for="event-type-taxi-1">${PointTypeDescription[pointType]}</label>
@@ -37,7 +37,7 @@ O
       </label>
       <input class="event__input  event__input--city" id="event-city-1" type="text" name="event-city" value=${city} list="city-list-1">
       <datalist id="city-list-1">
-      ${destinations.map((destination) =>(`<option value=${destination.name}></option>`))}
+      ${destinations.map((destination) =>(`<option value=${destination.name}></option>`)).join('')}
       </datalist>
     </div>
 
@@ -62,31 +62,26 @@ O
   </header>
 
   <section class="event__details">
+    ${availableOffers.length > 0 ? (`
+    <section class="event__section        event__section--offers">
+    <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+      <div class="event__available-offers">
+        ${availableOffers.map((offer) => (`<div class="event__offer-selector">
+        <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox"  name="event-offer-luggage" ${offers.some((offerId) => offer.id === offerId) ? 'checked' : ''}>
+          <label class="event__offer-label" for="event-offer-luggage-1">
+            <span class="event__offer-title">${offer.title}</span>+€&nbsp;<span class="event__offer-price">${offer.price}</span>
+          </label>
+        </div>`)).join('')}
+      </div>
+    </section>`) : ''}
 
-  ${availableOffers.length > 0 ? `<section class="event__section        event__section--offers">
-  <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-  ${availableOffers.map((offer) => (
-    `<div class="event__available-offers">
-  <div class="event__offer-selector">
-  <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" ${offers.some((offerId) => offer.id === offerId) ? 'checked' : ''}checked>
-  <label class="event__offer-label" for="event-offer-luggage-1">
-  <span class="event__offer-title">${offer.title}</span>
-  +€&nbsp;
-  <span class="event__offer-price">${offer.price}</span>
- </label>
-</div>
-</div>`)).join('')}
-
-</section>` : ''}
-
-<section class="event__section  event__section--destination">
+    <section class="event__section        event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
       <p class="event__destination-description"> ${currentDestination.description}</p>
 
       <div class="event__photos-container">
         <div class="event__photos-tape">
         ${currentDestination.pictures.map((picture) => (`<img class="event__photo" src= ${picture.src} alt=${picture.description}>`)).join('')}
-
         </div>
       </div>
     </section>
