@@ -1,28 +1,38 @@
-import TripEditFormView from '../view/edit-form-view.js';
+import TripEditFormView from '../view/trip-edit-form-view.js';
 import TripFiltersView from '../view/trip-filters-view.js';
 import TripPointView from '../view/trip-point-view.js';
-import TripListView from '../view/trip-events-view.js';
+import TripListView from '../view/trip-list-view.js';
 import TripSortView from '../view/trip-sort-view.js';
 import { render } from '../render.js';
 
-// создадим отдельные вьюшки  с помощью класса
 export default class BoardPresenter {
   tripListComponent = new TripListView();
+  #filtersContainer = undefined;
+  #tripEventsContainer = undefined;
+  #pointModel = undefined;
 
-  //foo создающая экземпляр класса
-  constructor({ filterContainer, contentContainer }) {
-    this.filterContainer = filterContainer;
-    this.contentContainer = contentContainer;
+  constructor({ filtersContainer, tripEventsContainer, pointModel }) {
+    this.#filtersContainer = filtersContainer;
+    this.#tripEventsContainer = tripEventsContainer;
+    this.#pointModel = pointModel;
   }
 
-  //создаем вьюшки = экземпляры компонентов
   init() {
-    render(new TripFiltersView(), this.filterContainer);
-    render(new TripSortView(), this.contentContainer);
-    render(new TripEditFormView(), this.contentContainer);
-    render(this.tripListComponent, this.contentContainer);
-    for (let i = 0; i < 3; i++) {
-      render(new TripPointView(), this.tripListComponent.getElement());
+    const offersByType = [...this.#pointModel.getOffersByType()];
+    const points = [...this.#pointModel.getPoint()];
+    const destinations = [...this.#pointModel.getDestination()];
+
+
+    render(new TripFiltersView(), this.#filtersContainer);
+    render(new TripSortView(), this.#tripEventsContainer);
+    render(new TripEditFormView({offersByType, point: points[0], destinations: destinations}), this.#tripEventsContainer);
+    render(this.tripListComponent, this.#tripEventsContainer);
+
+    for (let i = 1; i < points.length; i++) {
+      render(
+        new TripPointView({offersByType, point: points[i] }),
+        this.tripListComponent.getElement()
+      );
     }
   }
 }

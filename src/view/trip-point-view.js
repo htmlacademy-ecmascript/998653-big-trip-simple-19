@@ -1,28 +1,49 @@
 import { createElement } from '../render.js';
-function createTripPointView() {
+import {
+  humanizePointCurrentDatebyHtml,
+  humanizePointCurrentDate,
+  humanizePointCurrentTime,
+} from '../utils.js';
+
+function createTripPointView(offersByType, point) {
+  const { basePrice,dateFrom ,dateTo, city, offers, type } = point;
+
+  //найти по типу доступные офферы ???
+  const availableOffers = offersByType.find((x) => x.type === type).offers; //почему андефайнд? как понять, что правый type - именно от point?
+
+  //из этих оферов взять те айдишник которого есть в офферсах нашего пойнта ????
+
+  //filter - создает новый массив из элементов, прошедших проверку в СB
+
+  //some - проверяет - удовлетворяет  элемент массива условию, заданному в CB
+  const currentOffers = availableOffers.filter((x) => offers.some((y) => y === x.id));
+
+
   return `<li class="trip-events__item">
   <div class="event">
-    <time class="event__date" datetime="2019-03-18">MAR 18</time>
+    <time class="event__date" datetime=${humanizePointCurrentDatebyHtml(dateFrom)}>${humanizePointCurrentDate(dateFrom)}</time>
     <div class="event__type">
-      <img class="event__type-icon" width="42" height="42" src="img/icons/taxi.png" alt="Event type icon">
+      <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
     </div>
-    <h3 class="event__title">Taxi Amsterdam</h3>
+    <h3 class="event__title">${type} ${city}</h3>
     <div class="event__schedule">
       <p class="event__time">
-        <time class="event__start-time" datetime="2019-03-18T10:30">10:30</time>
+        <time class="event__start-time" datetime= ${humanizePointCurrentDatebyHtml(dateFrom)}>${humanizePointCurrentTime(dateFrom)}</time>
         —
-        <time class="event__end-time" datetime="2019-03-18T11:00">11:00</time>
+        <time class="event__end-time" datetime= ${humanizePointCurrentDatebyHtml(dateTo)}>${humanizePointCurrentTime(dateTo)}</time>
       </p>
     </div>
     <p class="event__price">
-      €&nbsp;<span class="event__price-value">20</span>
+      €&nbsp;<span class="event__price-value">${basePrice}</span>
     </p>
+
+
     <h4 class="visually-hidden">Offers:</h4>
     <ul class="event__selected-offers">
       <li class="event__offer">
-        <span class="event__offer-title">Order Uber</span>
-        +€&nbsp;
-        <span class="event__offer-price">20</span>
+       ${currentOffers.length > 0 ? currentOffers.map((offer) => (`<span class="event__offer-title">${offer.title}</span>
+       +€&nbsp;
+       <span class="event__offer-price">${offer.price}</span>`)).join('') : '<span class="event__offer-title">No additional offers</span>'}
       </li>
     </ul>
     <button class="event__rollup-btn" type="button">
@@ -34,14 +55,21 @@ function createTripPointView() {
 
 export default class TripPointView {
   element = null;
+
+  constructor({ offersByType, point }) {
+    this.point = point;
+    this.offersByType = offersByType;
+  }
+
   getTemplate() {
-    return createTripPointView();
+    return createTripPointView(this.offersByType, this.point);
   }
 
   getElement() {
     if (!this.element) {
       this.element = createElement(this.getTemplate());
     }
+
     return this.element;
   }
 
