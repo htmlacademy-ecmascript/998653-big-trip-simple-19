@@ -14,7 +14,6 @@ function createTripPointView(offersByType, point) {
   //из этих оферов взять те айдишник которого есть в офферсах нашего пойнта ????
 
   //filter - создает новый массив из элементов, прошедших проверку в СB
-
   //some - проверяет - удовлетворяет  элемент массива условию, заданному в CB
   const currentOffers = availableOffers.filter((x) => offers.some((y) => y === x.id));
 
@@ -54,23 +53,25 @@ function createTripPointView(offersByType, point) {
 }
 
 export default class TripPointView {
-  element = null;
+  #element = null;
+  #point = [];
+  #offersByType = [];
 
   constructor({ offersByType, point }) {
-    this.point = point;
-    this.offersByType = offersByType;
+    this.#point = point;
+    this.#offersByType = offersByType;
   }
 
-  getTemplate() {
-    return createTripPointView(this.offersByType, this.point);
+  get template() {
+    return createTripPointView(this.#offersByType, this.#point);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
+  get element() {
+    if (!this.#element) {
+      this.#element = createElement(this.template);
     }
 
-    return this.element;
+    return this.#element;
   }
 
   removeElement() {

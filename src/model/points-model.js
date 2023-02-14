@@ -4,15 +4,15 @@ export default class PointModel {
   #destinations = [];
 
 
-  getOffersByType() {
+  get offersByType() {
     return this.#offersByType;
   }
 
-  getPoint() {
+  get point() {
     return this.#points;
   }
 
-  getDestination() {
+  get destination() {
     return this.#destinations;
   }
 
