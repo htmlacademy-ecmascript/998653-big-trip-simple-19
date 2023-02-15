@@ -23,15 +23,15 @@ export default class BoardPresenter {
 
   init() {
     const offersByType = [...this.#pointModel.offersByType];
-    const points = [...this.#pointModel.point];
-    const destinations = [...this.#pointModel.destination];
+    const points = [...this.#pointModel.points];
+    const destinations = [...this.#pointModel.destinations];
 
 
     render(new TripFiltersView(), this.#filtersContainer);
 
 
     if(points.length === 0) {
-      render(new TripListEmpty, this.#pageBodyContainer);
+      render(new TripListEmpty(), this.#pageBodyContainer);
     } else {
       render(new TripSortView(), this.#tripEventsContainer);
       render(this.#tripListComponent, this.#tripEventsContainer);
@@ -40,16 +40,16 @@ export default class BoardPresenter {
         // render(
         //   new TripPointView({offersByType, point: points[i] }),
         //   this.#tripListComponent.element);
-        this.#renderPoint({offersByType, point: points[i], destinations});
+        this.#renderPoint(offersByType, points[i], destinations);
       }
     }
   }
 
 
   //реализуем внутренний интерфейс презентора
-  #renderPoint(offersByType, points, destinations) {
-    const tripPointComponent = new TripPointView ({offersByType, points} );
-    const tripEditFormComponent = new TripEditFormView({offersByType, points, destinations});
+  #renderPoint(offersByType, point, destinations) {
+    const tripPointComponent = new TripPointView ({offersByType, point} );
+    const tripEditFormComponent = new TripEditFormView({offersByType, point, destinations});
 
     const replacePointToForm = () => {
       this.#tripListComponent.element.replaceChild(tripEditFormComponent.element, tripPointComponent.element);
@@ -67,12 +67,12 @@ export default class BoardPresenter {
       }
     };
 
-    tripPointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+    tripPointComponent.element.addEventListener('click', () => {
       replacePointToForm();
       document.addEventListener('keydown', escKeyDownHandler);
     });
 
-    tripEditFormComponent.element.querySelector('.event').addEventListener('submit', (evt) => {
+    tripEditFormComponent.element.addEventListener('submit', (evt) => {
       evt.preventDefault();
       replaceFormToPoint();
       document.removeEventListener('keydown', escKeyDownHandler);

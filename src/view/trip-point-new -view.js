@@ -3,7 +3,7 @@ import { humanizePointCurrentDateTimebyForm, humanizePointCurrentTime} from '../
 import { PointType, PointTypeDescription} from '../constans.js';
 
 
-function createTripEditFormView(offersByType, points, destinations) {
+function createTripNewFormView(offersByType, points, destinations) {
   const { basePrice, dateFrom, dateTo, city, offers, type } = points;
   const currentDestination = destinations.find((x) => x.name === city);
   const currentOffers = offersByType.find((x) => x.type === type);
