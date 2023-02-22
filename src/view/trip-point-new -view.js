@@ -3,7 +3,7 @@ import { humanizePointCurrentDateTimebyForm, humanizePointCurrentTime} from '../
 import { PointType, PointTypeDescription} from '../constans.js';
 
 
-function createTripNewFormView(offersByType, points, destinations) {
+function createTripPointNewView(offersByType, points, destinations) {
   const { basePrice, dateFrom, dateTo, city, offers, type } = points;
   const currentDestination = destinations.find((x) => x.name === city);
   const currentOffers = offersByType.find((x) => x.type === type);
@@ -43,10 +43,10 @@ function createTripNewFormView(offersByType, points, destinations) {
 
     <div class="event__field-group  event__field-group--time">
       <label class="visually-hidden" for="event-start-time-1">From</label>
-      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value=${humanizePointCurrentDateTimebyForm(dateFrom)}>${humanizePointCurrentTime(dateFrom)}
+      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value=${humanizePointCurrentDateTimebyForm(dateFrom)}${humanizePointCurrentTime(dateFrom)}>
       —
       <label class="visually-hidden" for="event-end-time-1">To</label>
-      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value=${humanizePointCurrentDateTimebyForm(dateTo)}>${humanizePointCurrentTime(dateTo)}
+      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value=${humanizePointCurrentDateTimebyForm(dateTo)}>${humanizePointCurrentTime(dateTo)}>
     </div>
 
     <div class="event__field-group  event__field-group--price">
@@ -89,7 +89,7 @@ function createTripNewFormView(offersByType, points, destinations) {
 </form>`;
 }
 
-export default class TripEditFormView {
+export default class TripPointNew {
   #element = null;
   #offersByType = [];
   #point = [];
@@ -103,7 +103,7 @@ export default class TripEditFormView {
   }
 
   get template() {
-    return createTripEditFormView(this.#offersByType, this.#point, this.#destinations);
+    return createTripPointNewView(this.#offersByType, this.#point, this.#destinations);
   }
 
   get element() {

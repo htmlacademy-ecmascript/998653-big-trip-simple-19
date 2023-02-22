@@ -8,7 +8,6 @@ const offersByType = getOffersByType();
 const points = getPoints();
 const destinations = getDestinations();
 
-
 const filtersContainer = document.querySelector('.trip-controls__filters');
 const tripEventsContainer = document.querySelector('.trip-events');
 const pageBodyContainer = document.querySelector('.page-body__container');

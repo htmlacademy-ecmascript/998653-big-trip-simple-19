@@ -1,4 +1,5 @@
 import TripEditFormView from '../view/trip-edit-form-view.js';
+import TripPointNew from '../view/trip-point-new -view.js';
 import TripFiltersView from '../view/trip-filters-view.js';
 import TripPointView from '../view/trip-point-view.js';
 import TripListView from '../view/trip-list-view.js';
@@ -37,26 +38,27 @@ export default class BoardPresenter {
       render(this.#tripListComponent, this.#tripEventsContainer);
 
       for (let i = 0; i < points.length; i++) {
-        // render(
-        //   new TripPointView({offersByType, point: points[i] }),
-        //   this.#tripListComponent.element);
-        this.#renderPoint(offersByType, points[i], destinations);
+        render(
+          new TripPointView({offersByType, point: points[i] }),
+          this.#tripListComponent.element);
+        // this.#renderPoint(offersByType, points[i], destinations);
       }
     }
+    this.#renderPoint(offersByType, points, destinations);
   }
 
 
   //реализуем внутренний интерфейс презентора
   #renderPoint(offersByType, point, destinations) {
-    const tripPointComponent = new TripPointView ({offersByType, point} );
+    const tripPointNewComponent = new TripPointNew ({offersByType, point, destinations} );
     const tripEditFormComponent = new TripEditFormView({offersByType, point, destinations});
 
     const replacePointToForm = () => {
-      this.#tripListComponent.element.replaceChild(tripEditFormComponent.element, tripPointComponent.element);
+      this.#tripListComponent.element.replaceChild(tripEditFormComponent.element, tripPointNewComponent.element);
     };
 
     const replaceFormToPoint = () => {
-      this.#tripListComponent.element.replaceChild(tripPointComponent.element,tripEditFormComponent.element);
+      this.#tripListComponent.element.replaceChild(tripPointNewComponent.element,tripEditFormComponent.element);
     };
 
     const escKeyDownHandler = (evt) => {
@@ -67,7 +69,7 @@ export default class BoardPresenter {
       }
     };
 
-    tripPointComponent.element.addEventListener('click', () => {
+    tripPointNewComponent.element.addEventListener('click', () => {
       replacePointToForm();
       document.addEventListener('keydown', escKeyDownHandler);
     });
@@ -79,6 +81,6 @@ export default class BoardPresenter {
       //обработчик клика по кнопке с изображением «Стрелка вверх», которые будут заменять форму редактирования на точку маршрута. Механизм замены остаётся прежний.???
     });
 
-    render(tripPointComponent, this.#tripListComponent.element);
+    render(tripPointNewComponent, this.#tripListComponent.element);
   }
 }
