@@ -5,8 +5,8 @@ import {
   humanizePointCurrentTime,
 } from '../utils.js';
 
-function createTripPointView(offersByType, point) {
-  const { basePrice,dateFrom ,dateTo, city, offers, type } = point;
+function createTripPointView(offersByType, points) {
+  const { basePrice,dateFrom ,dateTo, city, offers, type } = points;
 
   //найти по типу доступные офферы ???
   const availableOffers = offersByType.find((x) => x.type === type).offers; //почему андефайнд? как понять, что правый type - именно от point?

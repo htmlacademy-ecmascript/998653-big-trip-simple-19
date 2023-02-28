@@ -18,45 +18,42 @@ export default class BoardPresenter {
     this.#filtersContainer = filtersContainer;
     this.#tripEventsContainer = tripEventsContainer;
     this.#pointModel = pointModel;
-    this.pageBodyContainer = pageBodyContainer;
+    this.#pageBodyContainer = pageBodyContainer;
   }
 
   init() {
     const offersByType = [...this.#pointModel.offersByType];
-    const points = [...this.#pointModel.point];
-    const destinations = [...this.#pointModel.destination];
+    const points = [...this.#pointModel.points];
+    const destinations = [...this.#pointModel.destinations];
 
 
     render(new TripFiltersView(), this.#filtersContainer);
 
 
     if(points.length === 0) {
-      render(new TripListEmpty, this.#pageBodyContainer);
+      render(new TripListEmpty(), this.#pageBodyContainer);
     } else {
       render(new TripSortView(), this.#tripEventsContainer);
       render(this.#tripListComponent, this.#tripEventsContainer);
 
-      for (let i = 0; i < points.length; i++) {
-        // render(
-        //   new TripPointView({offersByType, point: points[i] }),
-        //   this.#tripListComponent.element);
-        this.#renderPoint({offersByType, point: points[i], destinations});
+      for (const point of points) {
+        this.#renderPoint(offersByType, point, destinations);
       }
     }
+    this.#renderPoint(offersByType, points, destinations);
   }
 
 
-  //реализуем внутренний интерфейс презентора
-  #renderPoint(offersByType, points, destinations) {
-    const tripPointComponent = new TripPointView ({offersByType, points} );
-    const tripEditFormComponent = new TripEditFormView({offersByType, points, destinations});
+  #renderPoint(offersByType, point, destinations) {
+    const tripPointViewComponent = new TripPointView({offersByType, point, destinations} );
+    const tripEditFormComponent = new TripEditFormView({offersByType, point, destinations});
 
     const replacePointToForm = () => {
-      this.#tripListComponent.element.replaceChild(tripEditFormComponent.element, tripPointComponent.element);
+      this.#tripListComponent.element.replaceChild(tripEditFormComponent.element, tripPointViewComponent.element);
     };
 
     const replaceFormToPoint = () => {
-      this.#tripListComponent.element.replaceChild(tripPointComponent.element,tripEditFormComponent.element);
+      this.#tripListComponent.element.replaceChild(tripPointViewComponent.element,tripEditFormComponent.element);
     };
 
     const escKeyDownHandler = (evt) => {
@@ -67,18 +64,22 @@ export default class BoardPresenter {
       }
     };
 
-    tripPointComponent.element.querySelector('.event__rollup-btn').addEventListener('click', () => {
+    tripPointViewComponent.element.querySelector('.event__rollup-btn').addEventListener('click', (evt) => {
+      evt.preventDefault();
       replacePointToForm();
       document.addEventListener('keydown', escKeyDownHandler);
     });
 
-    tripEditFormComponent.element.querySelector('.event').addEventListener('submit', (evt) => {
+    tripEditFormComponent.element.querySelector('.event__rollup-btn').addEventListener('click', (evt) => {
       evt.preventDefault();
       replaceFormToPoint();
       document.removeEventListener('keydown', escKeyDownHandler);
-      //обработчик клика по кнопке с изображением «Стрелка вверх», которые будут заменять форму редактирования на точку маршрута. Механизм замены остаётся прежний.???
     });
 
-    render(tripPointComponent, this.#tripListComponent.element);
+    tripEditFormComponent.element.addEventListener('submit', (evt)=> {
+      evt.preventDefault();
+    });
+
+    render(tripPointViewComponent, this.#tripListComponent.element);
   }
 }
