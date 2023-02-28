@@ -23,8 +23,8 @@ function createTripEditFormView(offersByType, points, destinations) {
           <legend class="visually-hidden">Event type</legend>
 
           ${Object.values(PointType).map((pointType) => (`<div class="event__type-item">
-          <input id="event-${PointType}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value=${PointType} ${PointType === type ? 'checked' : ''}>
-          <label class="event__type-label  event__type-label--${PointType}" for="event-type-${PointType}-1">${PointTypeDescription[pointType]}</label>
+          <input id="event-${pointType}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value=${pointType} ${pointType === type ? 'checked' : ''}>
+          <label class="event__type-label  event__type-label--${pointType}" for="event-type-${pointType}-1">${PointTypeDescription[pointType]}</label>
         </div>`)).join('')}
 
 
@@ -34,7 +34,7 @@ function createTripEditFormView(offersByType, points, destinations) {
 
     <div class="event__field-group  event__field-group--destination">
       <label class="event__label  event__type-output" for="event-destination-1">
-        ${type} 
+        ${type}
       </label>
       <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value=${city} list="destination-list-1">
       <datalist id="destination-list-1">
