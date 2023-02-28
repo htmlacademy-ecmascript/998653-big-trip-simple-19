@@ -1,5 +1,4 @@
 import TripEditFormView from '../view/trip-edit-form-view.js';
-import TripPointNew from '../view/trip-point-new -view.js';
 import TripFiltersView from '../view/trip-filters-view.js';
 import TripPointView from '../view/trip-point-view.js';
 import TripListView from '../view/trip-list-view.js';
