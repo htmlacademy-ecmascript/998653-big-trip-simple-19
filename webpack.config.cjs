@@ -20,7 +20,6 @@ module.exports = {
   },
   plugins: [
     new FileManagerPlugin({
-      // или оставить clean: true?
       events: {
         onStart: {
           delete: ['build'],
@@ -31,15 +30,18 @@ module.exports = {
       patterns: [{ from: 'public', to: 'build' }],
     }),
   ],
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        exclude: /(node_modules)/,
+        use: ['babel-loader']
+      },
+      {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader']
+      }
+    ]
+  }
 };
 
-module.rules = {
-  test: /\.js$/,
-  exclude: /node_modules/,
-  use: {
-    loader: 'babel-loader',
-    options: {
-      cacheDirectory: true,
-    },
-  },
-};

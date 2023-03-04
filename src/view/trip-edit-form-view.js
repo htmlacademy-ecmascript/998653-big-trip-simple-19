@@ -1,4 +1,4 @@
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import { humanizePointCurrentDateTimebyForm, humanizePointCurrentTime} from '../utils.js';
 import { PointType, PointTypeDescription} from '../constans.js';
 
@@ -89,13 +89,14 @@ function createTripEditFormView(offersByType, points, destinations) {
 </form>`;
 }
 
-export default class TripEditFormView {
-  #element = null;
+export default class TripEditFormView extends AbstractView {
+
   #offersByType = [];
   #point = [];
   #destinations = [];
 
   constructor({offersByType, point, destinations }) {
+    super();
     this.#offersByType = offersByType;
     this.#point = point;
     this.#destinations = destinations;
@@ -104,16 +105,5 @@ export default class TripEditFormView {
 
   get template() {
     return createTripEditFormView(this.#offersByType, this.#point, this.#destinations);
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }

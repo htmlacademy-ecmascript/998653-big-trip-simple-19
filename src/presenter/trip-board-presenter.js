@@ -1,10 +1,11 @@
+import { render } from '../framework/render.js';
 import TripEditFormView from '../view/trip-edit-form-view.js';
 import TripFiltersView from '../view/trip-filters-view.js';
 import TripPointView from '../view/trip-point-view.js';
 import TripListView from '../view/trip-list-view.js';
 import TripSortView from '../view/trip-sort-view.js';
 import TripListEmpty from '../view/trip-list-empty.js';
-import { render } from '../render.js';
+
 
 export default class BoardPresenter {
   #tripListComponent = new TripListView();

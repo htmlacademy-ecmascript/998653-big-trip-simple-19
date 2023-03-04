@@ -1,4 +1,4 @@
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import {
   humanizePointCurrentDatebyHtml,
   humanizePointCurrentDate,
@@ -7,14 +7,7 @@ import {
 
 function createTripPointView(offersByType, points) {
   const { basePrice,dateFrom ,dateTo, city, offers, type } = points;
-
-  //найти по типу доступные офферы ???
-  const availableOffers = offersByType.find((x) => x.type === type).offers; //почему андефайнд? как понять, что правый type - именно от point?
-
-  //из этих оферов взять те айдишник которого есть в офферсах нашего пойнта ????
-
-  //filter - создает новый массив из элементов, прошедших проверку в СB
-  //some - проверяет - удовлетворяет  элемент массива условию, заданному в CB
+  const availableOffers = offersByType.find((x) => x.type === type).offers;
   const currentOffers = availableOffers.filter((x) => offers.some((y) => y === x.id));
 
 
@@ -52,29 +45,17 @@ function createTripPointView(offersByType, points) {
 </li>`;
 }
 
-export default class TripPointView {
-  #element = null;
+export default class TripPointView extends AbstractView{
   #point = [];
   #offersByType = [];
 
   constructor({ offersByType, point }) {
+    super();
     this.#point = point;
     this.#offersByType = offersByType;
   }
 
   get template() {
     return createTripPointView(this.#offersByType, this.#point);
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
-
-  removeElement() {
-    this.element = null;
   }
 }
