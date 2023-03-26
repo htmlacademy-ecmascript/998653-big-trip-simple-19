@@ -46,40 +46,33 @@ export default class BoardPresenter {
 
 
   #renderPoint(offersByType, point, destinations) {
-    const tripPointViewComponent = new TripPointView({offersByType, point, destinations} );
-    const tripEditFormComponent = new TripEditFormView({offersByType, point, destinations});
-
-    const replacePointToForm = () => {
-      this.#tripListComponent.element.replaceChild(tripEditFormComponent.element, tripPointViewComponent.element);
-    };
-
-    const replaceFormToPoint = () => {
-      this.#tripListComponent.element.replaceChild(tripPointViewComponent.element,tripEditFormComponent.element);
-    };
 
     const escKeyDownHandler = (evt) => {
       if(evt.key === 'Escape' || evt.key === 'Ecs') {
         evt.preventDefault();
-        replaceFormToPoint();
+        replaceFormToPoint.call(this);
         document.removeEventListener('keydown', escKeyDownHandler);
       }
     };
 
-    // tripPointViewComponent.element.querySelector('.event__rollup-btn').addEventListener('click', (evt) => {
-    //   evt.preventDefault();
-    //   replacePointToForm();
-    //   document.addEventListener('keydown', escKeyDownHandler);
-    // });
 
-    tripEditFormComponent.element.querySelector('.event__rollup-btn').addEventListener('click', (evt) => {
-      evt.preventDefault();
-      replaceFormToPoint();
+    const tripPointViewComponent = new TripPointView({offersByType, point, destinations,onEditDownClick: () => {
+      replacePointToForm.call(this);
+      document.addEventListener('keydown', escKeyDownHandler);
+    }});
+
+    const tripEditFormComponent = new TripEditFormView({offersByType, point, destinations,onEditUpClick: () => {
+      replaceFormToPoint.call(this);
       document.removeEventListener('keydown', escKeyDownHandler);
-    });
+    }});
 
-    tripEditFormComponent.element.addEventListener('submit', (evt)=> {
-      evt.preventDefault();
-    });
+    function replacePointToForm () {
+      this.#tripListComponent.element.replaceChild(tripEditFormComponent.element, tripPointViewComponent.element);
+    }
+
+    function replaceFormToPoint () {
+      this.#tripListComponent.element.replaceChild(tripPointViewComponent.element,tripEditFormComponent.element);
+    }
 
     render(tripPointViewComponent, this.#tripListComponent.element);
   }

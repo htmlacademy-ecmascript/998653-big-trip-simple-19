@@ -48,13 +48,13 @@ function createTripPointView(offersByType, points) {
 export default class TripPointView extends AbstractView{
   #point = [];
   #offersByType = [];
-  #handleEditClick = null;
+  #handleClick = null;
 
   constructor({ offersByType, point, onEditDownClick }) {
     super();
     this.#point = point;
     this.#offersByType = offersByType;
-    this.#handleEditClick = onEditDownClick; // в свойство nEditClick будет приходить  СВ(foo которая будет срабатывать на клике на кнопку вниз)
+    this.#handleClick = onEditDownClick; // в свойство nEditClick будет приходить  СВ(foo которая будет срабатывать на клике на кнопку вниз)
 
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
   }
@@ -65,7 +65,7 @@ export default class TripPointView extends AbstractView{
 
   #editClickHandler = (evt) => {
     evt.preventDefault();
-    this.#handleEditClick(); //foo которая приходит снаружи
+    this.#handleClick(); //foo которая приходит снаружи
   };
 
 }
