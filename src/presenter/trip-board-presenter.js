@@ -65,11 +65,11 @@ export default class BoardPresenter {
       }
     };
 
-    tripPointViewComponent.element.querySelector('.event__rollup-btn').addEventListener('click', (evt) => {
-      evt.preventDefault();
-      replacePointToForm();
-      document.addEventListener('keydown', escKeyDownHandler);
-    });
+    // tripPointViewComponent.element.querySelector('.event__rollup-btn').addEventListener('click', (evt) => {
+    //   evt.preventDefault();
+    //   replacePointToForm();
+    //   document.addEventListener('keydown', escKeyDownHandler);
+    // });
 
     tripEditFormComponent.element.querySelector('.event__rollup-btn').addEventListener('click', (evt) => {
       evt.preventDefault();
