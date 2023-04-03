@@ -8,10 +8,10 @@ const offersByType = getOffersByType();
 const points = getPoints();
 const destinations = getDestinations();
 
-
+const pageBodyMainContainer = document.querySelector('.page-body__page-main');
 const filtersContainer = document.querySelector('.trip-controls__filters');
-const tripEventsContainer = document.querySelector('.trip-events');
-const pageBodyContainer = document.querySelector('.page-body__container');
+const tripEventsContainer = pageBodyMainContainer.querySelector('.trip-events');
+const pageBodyContainer = pageBodyMainContainer.querySelector('.page-body__container');
 
 const pointModel = new PointModel();
 pointModel.init(offersByType, points, destinations);

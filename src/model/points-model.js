@@ -8,11 +8,11 @@ export default class PointModel {
     return this.#offersByType;
   }
 
-  get point() {
+  get points() {
     return this.#points;
   }
 
-  get destination() {
+  get destinations() {
     return this.#destinations;
   }
 
