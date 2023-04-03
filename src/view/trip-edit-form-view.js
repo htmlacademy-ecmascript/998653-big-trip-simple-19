@@ -1,5 +1,4 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { humanizePointCurrentDateTimebyForm, humanizePointCurrentTime} from '../utils.js';
 import { PointType, PointTypeDescription} from '../constans.js';
 
 

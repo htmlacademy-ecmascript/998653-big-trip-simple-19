@@ -5,7 +5,7 @@ import TripPointView from '../view/trip-point-view.js';
 import TripListView from '../view/trip-list-view.js';
 import TripSortView from '../view/trip-sort-view.js';
 import TripListEmpty from '../view/trip-list-empty.js';
-
+import {Filter} from '../constans.js';
 
 export default class BoardPresenter {
   #tripListComponent = new TripListView();
@@ -28,7 +28,7 @@ export default class BoardPresenter {
     const destinations = [...this.#pointModel.destinations];
 
 
-    render(new TripFiltersView(), this.#filtersContainer);
+    render(new TripFiltersView(Filter.Everything), this.#filtersContainer);
 
 
     if(points.length === 0) {
