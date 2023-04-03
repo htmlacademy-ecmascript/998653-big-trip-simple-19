@@ -41,7 +41,6 @@ export default class BoardPresenter {
         this.#renderPoint(offersByType, point, destinations);
       }
     }
-    this.#renderPoint(offersByType, points, destinations);
   }
 
 
@@ -56,7 +55,7 @@ export default class BoardPresenter {
     };
 
 
-    const tripPointViewComponent = new TripPointView({offersByType, point, destinations,onEditDownClick: () => {
+    const tripPointViewComponent = new TripPointView({offersByType, point, onEditDownClick: () => {
       replacePointToForm.call(this);
       document.addEventListener('keydown', escKeyDownHandler);
     }});

@@ -5,8 +5,12 @@ import {
   humanizePointCurrentTime,
 } from '../utils.js';
 
-function createTripPointView(offersByType, points) {
-  const { basePrice,dateFrom ,dateTo, city, offers, type } = points;
+function createTripPointView(offersByType, point) {
+  const { basePrice,dateFrom ,dateTo, city, offers, type } = point;
+  if(point.type === undefined) {
+    debugger;
+  }
+
   const availableOffers = offersByType.find((x) => x.type === type).offers;
   const currentOffers = availableOffers.filter((x) => offers.some((y) => y === x.id));
 

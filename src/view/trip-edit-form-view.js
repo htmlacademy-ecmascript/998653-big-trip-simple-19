@@ -45,10 +45,10 @@ function createTripEditFormView(offersByType, points, destinations) {
 
     <div class="event__field-group  event__field-group--time">
       <label class="visually-hidden" for="event-start-time-1">From</label>
-      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value=${humanizePointCurrentDateTimebyForm(dateFrom)}${humanizePointCurrentTime(dateFrom)}">
+      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${dateFrom}">
       —
       <label class="visually-hidden" for="event-end-time-1">To</label>
-      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value=${humanizePointCurrentDateTimebyForm(dateTo)}>${humanizePointCurrentTime(dateTo)}>
+      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${dateTo}>
     </div>
 
     <div class="event__field-group  event__field-group--price">
@@ -103,9 +103,9 @@ export default class TripEditFormView extends AbstractView {
     this.#point = point;
     this.#destinations = destinations;
     this.#handleEditClick = onEditUpClick;
-    this.element.addEventListener('click', this.#clickHandler);
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickHandler);
     this.#handleFormSubmit = onFormSubmit;
-    this.element.addEventListener('submit', this.#handleFormSubmit);
+    this.element.addEventListener('submit', this.#formSubmitHandler);
   }
 
   get template() {
