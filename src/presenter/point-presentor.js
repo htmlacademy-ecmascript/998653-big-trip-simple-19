@@ -1,4 +1,4 @@
-import { render, replace } from '../framework/render.js';
+import { render, replace, remove } from '../framework/render.js';
 import TripPointView from '../view/trip-point-view.js';
 import TripEditFormView from '../view/trip-edit-form-view.js';
 
@@ -22,6 +22,11 @@ export default class PointPresentor {
     this.#pointEditFormComponent = new TripEditFormView({ offersByType, point, destinations, onEditUpClick: this.#handleEditUpClick });
 
     render(this.#pointViewComponent, this.#pointListContainer);
+  }
+
+  destroy() {
+    remove(this.#pointViewComponent);
+    remove(this.#pointEditFormComponent);
   }
 
   #escKeyDownHandler = (evt) => {
