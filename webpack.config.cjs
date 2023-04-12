@@ -1,9 +1,14 @@
+/* eslint-disable no-undef */
+// eslint-disable-next-line no-unused-vars, no-undef
 const Webpack = require('webpack');
+// eslint-disable-next-line no-unused-vars
 const webpackDevServer = require('webpack-dev-server');
+// eslint-disable-next-line no-undef
 const path = require('path');
 const FileManagerPlugin = require('filemanager-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
 
+// eslint-disable-next-line no-undef
 module.exports = {
   entry: './src/main.js',
   output: {

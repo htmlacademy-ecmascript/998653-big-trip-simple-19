@@ -1,11 +1,10 @@
 import { render } from '../framework/render.js';
-import TripEditFormView from '../view/trip-edit-form-view.js';
 import TripFiltersView from '../view/trip-filters-view.js';
-import TripPointView from '../view/trip-point-view.js';
 import TripListView from '../view/trip-list-view.js';
 import TripSortView from '../view/trip-sort-view.js';
 import TripListEmpty from '../view/trip-list-empty.js';
 import {Filter} from '../constans.js';
+import PointPresentor from '../presenter/point-presentor.js';
 
 export default class BoardPresenter {
   #tripListComponent = new TripListView();
@@ -45,34 +44,7 @@ export default class BoardPresenter {
 
 
   #renderPoint(offersByType, point, destinations) {
-
-    const escKeyDownHandler = (evt) => {
-      if(evt.key === 'Escape' || evt.key === 'Ecs') {
-        evt.preventDefault();
-        replaceFormToPoint.call(this);
-        document.removeEventListener('keydown', escKeyDownHandler);
-      }
-    };
-
-
-    const tripPointViewComponent = new TripPointView({offersByType, point, onEditDownClick: () => {
-      replacePointToForm.call(this);
-      document.addEventListener('keydown', escKeyDownHandler);
-    }});
-
-    const tripEditFormComponent = new TripEditFormView({offersByType, point, destinations,onEditUpClick: () => {
-      replaceFormToPoint.call(this);
-      document.removeEventListener('keydown', escKeyDownHandler);
-    }});
-
-    function replacePointToForm () {
-      this.#tripListComponent.element.replaceChild(tripEditFormComponent.element, tripPointViewComponent.element);
-    }
-
-    function replaceFormToPoint () {
-      this.#tripListComponent.element.replaceChild(tripPointViewComponent.element,tripEditFormComponent.element);
-    }
-
-    render(tripPointViewComponent, this.#tripListComponent.element);
+    const pointPresentor = new PointPresentor({pointListContainer: this.#tripListComponent.element});
+    pointPresentor.init(offersByType, point, destinations);
   }
 }
