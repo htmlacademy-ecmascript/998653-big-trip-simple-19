@@ -1,4 +1,4 @@
-import { render, replace } from '../framework/render.js';
+import { remove, render, replace,} from '../framework/render.js';
 import TripPointView from '../view/trip-point-view.js';
 import TripEditFormView from '../view/trip-edit-form-view.js';
 
@@ -17,11 +17,38 @@ export default class PointPresentor {
   }
 
   init(offersByType, point, destinations) {
-    this.#pointViewComponent = new TripPointView({ offersByType,point,onEditDownClick: this.#handleEditDownClick });
+    this.#offersByType = offersByType;
+    this.#point = point;
+    this.#destinations = destinations;
 
+    this.#pointViewComponent = new TripPointView({ offersByType, point, onEditDownClick: this.#handleEditDownClick });
     this.#pointEditFormComponent = new TripEditFormView({ offersByType, point, destinations, onEditUpClick: this.#handleEditUpClick });
 
-    render(this.#pointViewComponent, this.#pointListContainer);
+    // запомним предыдущие компоненты
+    const prevPointComponent = this.#pointViewComponent;
+    const prevPointEditComponent = this.#pointViewComponent;
+
+    // проверка условия, что компоненты ранее не создавались:
+    if(this.#pointViewComponent === null || this.#pointEditFormComponent === null) {
+      render(this.#pointViewComponent, this.#pointListContainer);
+    }
+
+    // если они ранее создавались - заменяем на новые и удаляем старые
+    if(this.#pointListContainer.contains(prevPointComponent.element)) {
+      replace(this.#pointViewComponent, prevPointComponent);
+    }
+
+    if(this.#pointListContainer.contains(prevPointEditComponent.element)) {
+      replace(this.#pointEditFormComponent, prevPointEditComponent);
+    }
+
+    remove(prevPointComponent);
+    remove(prevPointEditComponent);
+  }
+
+  destroy() {
+    remove(this.#pointViewComponent);
+    remove(this.#pointEditFormComponent);
   }
 
   #escKeyDownHandler = (evt) => {
