@@ -5,6 +5,7 @@ import TripSortView from '../view/trip-sort-view.js';
 import TripListEmpty from '../view/trip-list-empty.js';
 import {Filter} from '../constans.js';
 import PointPresentor from '../presenter/point-presentor.js';
+import { updateItem } from '../utils.js';
 
 export default class BoardPresenter {
   #tripListComponent = new TripListView();
@@ -44,6 +45,12 @@ export default class BoardPresenter {
     }
   }
 
+  //обработчик для обновления точек
+  #handlePointChange = (updatedPoint) => {
+    this.points = updateItem(this.points, updatedPoint);
+    //перезаписываем задачу = заново инициализируем обновленный презентор который ищем по ключу
+    this.#pointPresentor.get(updatedPoint.id).init(updatedPoint);
+  };
 
   #renderPoint(offersByType, point, destinations) {
     const pointPresentor = new PointPresentor({pointListContainer: this.#tripListComponent.element});

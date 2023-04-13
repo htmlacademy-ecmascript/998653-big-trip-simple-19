@@ -23,6 +23,15 @@ const humanizePointCurrentDate = (currentDate) =>
 const humanizePointCurrentTime = (currentDate) =>
   currentDate ? dayjs(currentDate).format(DATA_TIME_FORMAT.POINT_TIME) : '';
 
+const date = new Date();
+// eslint-disable-next-line no-console
+console.log(humanizePointCurrentDatebyHtml(date));
+
+function updateItem(items, update) {
+  return items.map((item) => item.id === update.id ? update : item);
+}
+
+
 export {
   getRandomArrayElement,
   getRandomInt,
@@ -30,9 +39,5 @@ export {
   humanizePointCurrentDateTimebyForm,
   humanizePointCurrentDate,
   humanizePointCurrentTime,
+  updateItem
 };
-
-
-const date = new Date();
-// eslint-disable-next-line no-console
-console.log(humanizePointCurrentDatebyHtml(date));
