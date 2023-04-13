@@ -52,4 +52,10 @@ export default class BoardPresenter {
     //cохраняем отрисованный экземпляр
     this.#pointPresentor.set(point.id, PointPresentor);
   }
+
+  //foo для очистки списка задач
+  #clearPointList () {
+    this.#pointPresentor.forEach((presentor) => presentor.destroy());
+    this.#pointPresentor.clear(); //clear() - встроенный метод в мапу
+  }
 }
