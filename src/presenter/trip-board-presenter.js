@@ -13,6 +13,8 @@ export default class BoardPresenter {
   #pageBodyContainer = undefined;
   #pointModel = undefined;
 
+  //заведем свойство, в котором презентор будет хранить сыылки на все PointPresentor
+  #pointPresentor = new Map(); //коллекция ключ/значение Ключ - значение любых типов
 
   constructor({ filtersContainer, tripEventsContainer, pointModel, pageBodyContainer }) {
     this.#filtersContainer = filtersContainer;
@@ -46,5 +48,8 @@ export default class BoardPresenter {
   #renderPoint(offersByType, point, destinations) {
     const pointPresentor = new PointPresentor({pointListContainer: this.#tripListComponent.element});
     pointPresentor.init(offersByType, point, destinations);
+
+    //cохраняем отрисованный экземпляр
+    this.#pointPresentor.set(point.id, PointPresentor);
   }
 }
