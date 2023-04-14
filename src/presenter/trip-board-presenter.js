@@ -53,7 +53,10 @@ export default class BoardPresenter {
   };
 
   #renderPoint(offersByType, point, destinations) {
-    const pointPresentor = new PointPresentor({pointListContainer: this.#tripListComponent.element});
+    const pointPresentor = new PointPresentor({
+      pointListContainer: this.#tripListComponent.element,
+      onDataChange: this.#handlePointChange // вызов обработчика - ссылку передаем в свойство
+    });
     pointPresentor.init(offersByType, point, destinations);
 
     //cохраняем отрисованный экземпляр

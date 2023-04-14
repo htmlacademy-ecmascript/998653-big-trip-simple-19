@@ -10,10 +10,13 @@ export default class PointPresentor {
   #offersByType = null;
   #point = null;
   #destinations = null;
+  #handleDataChange = null;
 
 
-  constructor({ pointListContainer }) {
+  constructor({ pointListContainer, onDataChange}) {
     this.#pointListContainer = pointListContainer;
+    this.#handleDataChange = onDataChange;
+
   }
 
   init(offersByType, point, destinations) {
@@ -21,8 +24,25 @@ export default class PointPresentor {
 
     this.#pointEditFormComponent = new TripEditFormView({ offersByType, point, destinations, onEditUpClick: this.#handleEditUpClick });
 
-    render(this.#pointViewComponent, this.#pointListContainer);
+    render(this.#pointViewComponent, this.#pointListContainer );
+
+    // ПАДАЕТ НА ЭТОМ МЕСТЕ - ХЗ
+    //const prevPointComponent = this.#pointViewComponent ;
+    // const prevPointEditComponent = this.#pointEditFormComponent;
+
+    // if(prevPointComponent === null || prevPointEditComponent === null) {
+    //   render(this.#pointViewComponent, this.#pointListContainer);
+    // }
+
+    // // проверка на наличие в DOM необходима, чтобы не пытаться заменить то что не было отрисовано
+    // if(this.#pointListContainer.contains(this.#pointViewComponent.element)) {
+    //   replace(this.#pointViewComponent, prevPointComponent);
+    // }
+    // if(this.#pointListContainer.contains(this.#pointEditFormComponent.element)) {
+    //   replace(this.#pointEditFormComponent, prevPointEditComponent);
+    // }
   }
+
 
   destroy() {
     remove(this.#pointViewComponent);
