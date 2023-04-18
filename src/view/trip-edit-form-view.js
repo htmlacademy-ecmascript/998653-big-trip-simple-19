@@ -93,7 +93,7 @@ export default class TripEditFormView extends AbstractView {
   #offersByType = [];
   #point = [];
   #destinations = [];
-  #handleEditClick = null;
+  #handleEditUpClick = null;
   #handleFormSubmit = null;
 
   constructor({offersByType, point, destinations, onEditUpClick, onFormSubmit}) {
@@ -101,7 +101,8 @@ export default class TripEditFormView extends AbstractView {
     this.#offersByType = offersByType;
     this.#point = point;
     this.#destinations = destinations;
-    this.#handleEditClick = onEditUpClick;
+    this.#handleEditUpClick = onEditUpClick;
+
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#clickHandler);
     this.#handleFormSubmit = onFormSubmit;
     this.element.addEventListener('submit', this.#formSubmitHandler);
@@ -113,7 +114,7 @@ export default class TripEditFormView extends AbstractView {
 
   #clickHandler = (evt) => {
     evt.preventDefault();
-    this.#handleEditClick();
+    this.#handleEditUpClick();
   };
 
   #formSubmitHandler = (evt) => {

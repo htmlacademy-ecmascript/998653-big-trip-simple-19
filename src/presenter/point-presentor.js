@@ -101,7 +101,6 @@ export default class PointPresentor {
   }
 
   #handleEditUpClick = () => {
-    this.#handleDataChange();
     this.#replaceFormToPoint();
   };
 

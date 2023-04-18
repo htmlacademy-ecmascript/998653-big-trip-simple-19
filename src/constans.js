@@ -40,5 +40,9 @@ const FilterDescription = {
   [Filter.Future]: 'Future'
 };
 
+const SortType = {
+  DAY: 'Day',
+  PRICE: 'Price',
+};
 
-export { PointType, PointTypeDescription, Filter, FilterDescription};
+export { PointType, PointTypeDescription, Filter, FilterDescription, SortType };
