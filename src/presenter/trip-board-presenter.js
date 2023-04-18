@@ -45,6 +45,10 @@ export default class BoardPresenter {
     }
   }
 
+  #handleModeChange = () => {
+    this.#pointPresentor.forEach((presentor) => presentor.resetView());
+  };
+
   //обработчик для обновления точек Как получить обновленную задачу? updatedPoint
   #handlePointChange = (updatedPoint) => {
     this.points = updateItem(this.points, updatedPoint);
@@ -55,14 +59,16 @@ export default class BoardPresenter {
   #renderPoint(offersByType, point, destinations) {
     const pointPresentor = new PointPresentor({
       pointListContainer: this.#tripListComponent.element,
-      onDataChange: this.#handlePointChange // вызов обработчика - ссылку передаем в свойство
+      onDataChange: this.#handlePointChange, // вызов обработчика - ссылку передаем в свойство
+      onModeChange: this.#handleModeChange
     });
+
     pointPresentor.init(offersByType, point, destinations);
 
     //cохраняем отрисованный экземпляр
     this.#pointPresentor.set(point.id, PointPresentor);
   }
- 
+
   //foo для очистки списка задач
   #clearPointList () {
     this.#pointPresentor.forEach((presentor) => presentor.destroy());

@@ -2,6 +2,11 @@ import { render, replace, remove } from '../framework/render.js';
 import TripPointView from '../view/trip-point-view.js';
 import TripEditFormView from '../view/trip-edit-form-view.js';
 
+const Mode = {
+  DEFAULT: 'DEFAULT',
+  EDITING: 'EDITING'
+};
+
 export default class PointPresentor {
   #pointListContainer = null;
   #pointViewComponent = null;
@@ -10,13 +15,17 @@ export default class PointPresentor {
   #offersByType = null;
   #point = null;
   #destinations = null;
+  #mode = Mode.DEFAULT;
+
   #handleDataChange = null;
+  //обработчик смены точки маршрута на форму редактирования = переключение режимов
+  #handleModeChange = null;
 
 
-  constructor({ pointListContainer, onDataChange}) {
+  constructor({ pointListContainer, onDataChange, onModeChange }) {
     this.#pointListContainer = pointListContainer;
     this.#handleDataChange = onDataChange;
-
+    this.#handleModeChange = onModeChange;
   }
 
   init(offersByType, point, destinations) {
@@ -44,15 +53,16 @@ export default class PointPresentor {
 
     if(prevPointComponent === null || prevPointEditComponent === null) { //почему prevPointComponent - underfind?
       render(this.#pointViewComponent, this.#pointListContainer);
+      return; //зачем нужен return????
     }
 
     // проверка на наличие в DOM необходима, чтобы не пытаться заменить то что не было отрисовано
-    if(this.#pointListContainer.contains(prevPointComponent.element)) {
+    if(this.#mode === Mode.DEFAULT) {
       replace(this.#pointViewComponent, prevPointComponent);
     }
 
     if(this.#pointListContainer.contains(prevPointEditComponent.element)) {
-      replace(this.#pointEditFormComponent, prevPointEditComponent);
+      replace(this.#mode === Mode.DEFAULT);
     }
   }
 
@@ -70,13 +80,21 @@ export default class PointPresentor {
     }
   };
 
-  #replacePointToForm () {
+  resetView() {
+    if(this.#mode !== Mode.DEFAULT) {
+      this. #replaceFormToPoint();
+    }
+  }
+
+  #replacePointToForm() {
     replace(this.#pointEditFormComponent, this.#pointViewComponent);
     document.addEventListener('keydown', this.#escKeyDownHandler);
+    this.#handleModeChange();
+    this.#mode = Mode.EDITING;
 
   }
 
-  #replaceFormToPoint () {
+  #replaceFormToPoint() {
     replace(this.#pointViewComponent,this.#pointEditFormComponent);
     document.removeEventListener('keydown', this.#escKeyDownHandler);
 
