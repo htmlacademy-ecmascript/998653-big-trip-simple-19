@@ -17,6 +17,7 @@ function createTripPointView(offersByType, point) {
 
   return `<li class="trip-events__item">
   <div class="event">
+  <button  class = "event__btn" type = "button">RELOAD</button>
     <time class="event__date" datetime=${humanizePointCurrentDatebyHtml(dateFrom)}>${humanizePointCurrentDate(dateFrom)}</time>
     <div class="event__type">
       <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
@@ -53,14 +54,19 @@ export default class TripPointView extends AbstractView{
   #point = [];
   #offersByType = [];
   #handleClick = null;
+  #handleReloadButtonClick = null;
 
-  constructor({ offersByType, point, onEditDownClick }) {
+  constructor({ offersByType, point, onEditDownClick, onReloadButtonClick }) {
     super();
     this.#point = point;
     this.#offersByType = offersByType;
     this.#handleClick = onEditDownClick; // в свойство nEditClick будет приходить  СВ(foo которая будет срабатывать на клике на кнопку вниз)
+    this.#handleReloadButtonClick = onReloadButtonClick;
 
     this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
+    this.element.querySelector('.event__btn').addEventListener('click', this.#reloadClickHandler);
+
+
   }
 
   get template() {
@@ -72,4 +78,8 @@ export default class TripPointView extends AbstractView{
     this.#handleClick(); //foo которая приходит снаружи
   };
 
+  #reloadClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleReloadButtonClick();
+  };
 }

@@ -20,27 +20,40 @@ export default class PointPresentor {
   }
 
   init(offersByType, point, destinations) {
-    this.#pointViewComponent = new TripPointView({ offersByType,point,onEditDownClick: this.#handleEditDownClick });
+    this.#offersByType = offersByType;
+    this.#point = point;
+    this.#destinations = destinations;
 
-    this.#pointEditFormComponent = new TripEditFormView({ offersByType, point, destinations, onEditUpClick: this.#handleEditUpClick });
+    const prevPointComponent = this.#pointViewComponent ; //почему не отрисовалис компоненты?
+    const prevPointEditComponent = this.#pointEditFormComponent;
 
-    render(this.#pointViewComponent, this.#pointListContainer );
 
-    // ПАДАЕТ НА ЭТОМ МЕСТЕ - ХЗ
-    //const prevPointComponent = this.#pointViewComponent ;
-    // const prevPointEditComponent = this.#pointEditFormComponent;
+    this.#pointViewComponent = new TripPointView({
+      offersByType,
+      point,
+      onEditDownClick: this.#handleEditDownClick,
+      onReloadButtonClick: this.#handleReloadButtonClick
+    });
 
-    // if(prevPointComponent === null || prevPointEditComponent === null) {
-    //   render(this.#pointViewComponent, this.#pointListContainer);
-    // }
+    this.#pointEditFormComponent = new TripEditFormView({
+      offersByType,
+      point,
+      destinations,
+      onEditUpClick: this.#handleEditUpClick });
 
-    // // проверка на наличие в DOM необходима, чтобы не пытаться заменить то что не было отрисовано
-    // if(this.#pointListContainer.contains(this.#pointViewComponent.element)) {
-    //   replace(this.#pointViewComponent, prevPointComponent);
-    // }
-    // if(this.#pointListContainer.contains(this.#pointEditFormComponent.element)) {
-    //   replace(this.#pointEditFormComponent, prevPointEditComponent);
-    // }
+
+    if(prevPointComponent === null || prevPointEditComponent === null) { //почему prevPointComponent - underfind?
+      render(this.#pointViewComponent, this.#pointListContainer);
+    }
+
+    // проверка на наличие в DOM необходима, чтобы не пытаться заменить то что не было отрисовано
+    if(this.#pointListContainer.contains(prevPointComponent.element)) {
+      replace(this.#pointViewComponent, prevPointComponent);
+    }
+
+    if(this.#pointListContainer.contains(prevPointEditComponent.element)) {
+      replace(this.#pointEditFormComponent, prevPointEditComponent);
+    }
   }
 
 
@@ -70,11 +83,16 @@ export default class PointPresentor {
   }
 
   #handleEditUpClick = () => {
+    this.#handleDataChange();
     this.#replaceFormToPoint();
   };
 
   #handleEditDownClick = () => {
     this.#replacePointToForm ();
+  };
+
+  #handleReloadButtonClick = () => {
+    this.#handleDataChange({...this.#point});
   };
 }
 

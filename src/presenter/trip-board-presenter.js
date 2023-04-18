@@ -45,7 +45,7 @@ export default class BoardPresenter {
     }
   }
 
-  //обработчик для обновления точек
+  //обработчик для обновления точек Как получить обновленную задачу? updatedPoint
   #handlePointChange = (updatedPoint) => {
     this.points = updateItem(this.points, updatedPoint);
     //перезаписываем задачу = заново инициализируем обновленный презентор который ищем по ключу
@@ -62,7 +62,7 @@ export default class BoardPresenter {
     //cохраняем отрисованный экземпляр
     this.#pointPresentor.set(point.id, PointPresentor);
   }
-
+ 
   //foo для очистки списка задач
   #clearPointList () {
     this.#pointPresentor.forEach((presentor) => presentor.destroy());
