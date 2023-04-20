@@ -1,4 +1,5 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
+
 
 function createFirstTripPoint () {
   return (`<section class="trip-events">
@@ -7,21 +8,10 @@ function createFirstTripPoint () {
           </section>`);
 }
 // эта заглушка, когда нет никаких поинтов
-export default class TripListEmpty {
+export default class TripListEmpty extends AbstractView{
   #element = null;
 
   get template () {
     return createFirstTripPoint();
-  }
-
-  get element() {
-    if(!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }
