@@ -5,14 +5,15 @@ import TripSortView from '../view/trip-sort-view.js';
 import TripListEmpty from '../view/trip-list-empty.js';
 import {Filter} from '../constans.js';
 import PointPresentor from '../presenter/point-presentor.js';
-import { updateItem } from '../utils.js';
+import { updateItem, sortDateUp } from '../utils.js';
 import { SortType } from '../constans.js';
 
 export default class BoardPresenter {
-  #sortComponent = undefined;
   #filtersContainer = undefined;
-  #tripListComponent = new TripListView();
+  #filtercomponent = undefined;
   #tripEventsContainer = undefined;
+  #sortComponent = undefined;
+  #tripListComponent = new TripListView();
   #pageBodyContainer = undefined;
   #pointModel = undefined;
 
@@ -34,25 +35,11 @@ export default class BoardPresenter {
   }
 
   init() {
-    const offersByType = [...this.#pointModel.offersByType];
-    const points = [...this.#pointModel.points];
-    const destinations = [...this.#pointModel.destinations];
-
     //скопируем порядок точек при инициализации
-    const sourceBoardPoints = [...this.#pointModel.points];
 
-    render(new TripFiltersView(Filter.Everything), this.#filtersContainer);
-
-
-    if(points.length === 0) {
-      render(new TripListEmpty(), this.#pageBodyContainer);
-    } else {
-      render(this.#tripListComponent, this.#tripEventsContainer);
-
-      for (const point of points) {
-        this.#renderPoint(offersByType, point, destinations);
-      }
-    }
+    this.#renderFilter();
+    this.#renderSort();
+    this.#renderPointList();
   }
 
   #handleModeChange = () => {
@@ -70,23 +57,52 @@ export default class BoardPresenter {
 
   #sortPoints(sortType) {
     switch(sortType) {
-      case SortType.DAY:
+      case SortType.DAY: this.#soursedBoardPoints.sort(sortDateUp);
+        break;
+      //чтобы вернуть все как было запишем исходный массив
+      default: this.points = [...this.#pointModel.points];
     }
+    this.#currentSortType = sortType;
   }
 
 
-  #handleSortTypeChange = () => {
+  #handleSortTypeChange = (sortType) => {
     if(this.#currentSortType === SortType.DEFAULT) {
       return;
     }
-    this.#sortPoints();
+    this.#sortPoints(sortType);
+    // для сортировки  - сначала нужно удалить - потом заново отрисовать
+    this.#clearPointList();
+    this.#renderPointList();
   };
+
+  #renderFilter() { //не отрисовались
+    this.#filtercomponent = new TripFiltersView(Filter.Everything);
+    render(this.#filtercomponent, this.#filtersContainer);
+  }
 
   #renderSort() {
     this.#sortComponent = new TripSortView({
       onSortTypeChange: this.#handleSortTypeChange
     });
     render(this.#sortComponent, this.#tripEventsContainer, RenderPosition.AFTERBEGIN);
+  }
+
+  #renderPointList() {
+    const offersByType = [...this.#pointModel.offersByType];
+    const points = [...this.#pointModel.points];
+    const destinations = [...this.#pointModel.destinations];
+    const sourceBoardPoints = [...this.#pointModel.points];
+
+    if(points.length === 0) {
+      render(new TripListEmpty(), this.#pageBodyContainer);
+    } else {
+      render(this.#tripListComponent, this.#tripEventsContainer);
+
+      for (const point of points) {
+        this.#renderPoint(offersByType, point, destinations);
+      }
+    }
   }
 
   #renderPoint(offersByType, point, destinations) {
@@ -101,7 +117,7 @@ export default class BoardPresenter {
   }
 
   //foo для очистки списка задач
-  #clearPointList () {
+  #clearPointList() {
     this.#pointPresentor.forEach((presentor) => presentor.destroy());
     this.#pointPresentor.clear(); //clear() - встроенный метод в мапу
   }
