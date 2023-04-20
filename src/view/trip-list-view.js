@@ -5,7 +5,6 @@ function createTripEventsView() {
 }
 
 export default class TripListView extends AbstractView{
-  #element = null;
 
   get template() {
     return createTripEventsView();

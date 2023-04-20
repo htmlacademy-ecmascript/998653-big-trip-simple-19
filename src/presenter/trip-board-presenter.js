@@ -1,4 +1,4 @@
-import { render } from '../framework/render.js';
+import { render, RenderPosition } from '../framework/render.js';
 import TripFiltersView from '../view/trip-filters-view.js';
 import TripListView from '../view/trip-list-view.js';
 import TripSortView from '../view/trip-sort-view.js';
@@ -6,16 +6,22 @@ import TripListEmpty from '../view/trip-list-empty.js';
 import {Filter} from '../constans.js';
 import PointPresentor from '../presenter/point-presentor.js';
 import { updateItem } from '../utils.js';
+import { SortType } from '../constans.js';
 
 export default class BoardPresenter {
-  #tripListComponent = new TripListView();
+  #sortComponent = undefined;
   #filtersContainer = undefined;
+  #tripListComponent = new TripListView();
   #tripEventsContainer = undefined;
   #pageBodyContainer = undefined;
   #pointModel = undefined;
 
+
   //заведем свойство, в котором презентор будет хранить сыылки на все PointPresentor
   #pointPresentor = new Map(); //коллекция ключ/значение Ключ - значение любых типов
+
+  //переменная для хранения выбранного (текущего) варианта сортировки
+  currentSortType = SortType.DEFAULT;
 
   constructor({ filtersContainer, tripEventsContainer, pointModel, pageBodyContainer }) {
     this.#filtersContainer = filtersContainer;
@@ -36,7 +42,6 @@ export default class BoardPresenter {
     if(points.length === 0) {
       render(new TripListEmpty(), this.#pageBodyContainer);
     } else {
-      render(new TripSortView(), this.#tripEventsContainer);
       render(this.#tripListComponent, this.#tripEventsContainer);
 
       for (const point of points) {
@@ -56,15 +61,24 @@ export default class BoardPresenter {
     this.#pointPresentor.get(updatedPoint.id).init(updatedPoint);
   };
 
+  #handleSortTypeChange = (sortType) => {
+    console.log(sortType);
+  };
+
+  #renderSort() {
+    this.#sortComponent = new TripSortView({
+      onSortTypeChange: this.#handleSortTypeChange
+    });
+    render(this.#sortComponent, this.#tripEventsContainer, RenderPosition.AFTERBEGIN);
+  }
+
   #renderPoint(offersByType, point, destinations) {
     const pointPresentor = new PointPresentor({
       pointListContainer: this.#tripListComponent.element,
       onDataChange: this.#handlePointChange, // вызов обработчика - ссылку передаем в свойство
       onModeChange: this.#handleModeChange
     });
-
     pointPresentor.init(offersByType, point, destinations);
-
     //cохраняем отрисованный экземпляр
     this.#pointPresentor.set(point.id, PointPresentor);
   }

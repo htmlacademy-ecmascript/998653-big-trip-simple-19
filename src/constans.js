@@ -41,6 +41,7 @@ const FilterDescription = {
 };
 
 const SortType = {
+  DEFAULT: 'Default',
   DAY: 'Day',
   PRICE: 'Price',
 };
