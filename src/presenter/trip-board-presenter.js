@@ -21,7 +21,10 @@ export default class BoardPresenter {
   #pointPresentor = new Map(); //коллекция ключ/значение Ключ - значение любых типов
 
   //переменная для хранения выбранного (текущего) варианта сортировки
-  currentSortType = SortType.DEFAULT;
+  #currentSortType = SortType.DEFAULT;
+
+  //копия всех задач в изначальном порядке
+  #soursedBoardPoints = [];
 
   constructor({ filtersContainer, tripEventsContainer, pointModel, pageBodyContainer }) {
     this.#filtersContainer = filtersContainer;
@@ -35,6 +38,8 @@ export default class BoardPresenter {
     const points = [...this.#pointModel.points];
     const destinations = [...this.#pointModel.destinations];
 
+    //скопируем порядок точек при инициализации
+    const sourceBoardPoints = [...this.#pointModel.points];
 
     render(new TripFiltersView(Filter.Everything), this.#filtersContainer);
 
@@ -57,12 +62,24 @@ export default class BoardPresenter {
   //обработчик для обновления точек Как получить обновленную задачу? updatedPoint
   #handlePointChange = (updatedPoint) => {
     this.points = updateItem(this.points, updatedPoint);
+    //обновляем копию с исходным порядком точек
+    this.sourceBoardPoints = updateItem(this.sourceBoardPoints, updatedPoint);
     //перезаписываем задачу = заново инициализируем обновленный презентор который ищем по ключу
     this.#pointPresentor.get(updatedPoint.id).init(updatedPoint);
   };
 
-  #handleSortTypeChange = (sortType) => {
-    console.log(sortType);
+  #sortPoints(sortType) {
+    switch(sortType) {
+      case SortType.DAY:
+    }
+  }
+
+
+  #handleSortTypeChange = () => {
+    if(this.#currentSortType === SortType.DEFAULT) {
+      return;
+    }
+    this.#sortPoints();
   };
 
   #renderSort() {
