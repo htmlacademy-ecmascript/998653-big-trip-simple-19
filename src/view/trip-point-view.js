@@ -1,4 +1,4 @@
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import {
   humanizePointCurrentDatebyHtml,
   humanizePointCurrentDate,
@@ -7,19 +7,17 @@ import {
 
 function createTripPointView(offersByType, point) {
   const { basePrice,dateFrom ,dateTo, city, offers, type } = point;
+  if(point.type === undefined) {
+    debugger;
+  }
 
-  //найти по типу доступные офферы ???
-  const availableOffers = offersByType.find((x) => x.type === type).offers; //почему андефайнд? как понять, что правый type - именно от point?
-
-  //из этих оферов взять те айдишник которого есть в офферсах нашего пойнта ????
-
-  //filter - создает новый массив из элементов, прошедших проверку в СB
-  //some - проверяет - удовлетворяет  элемент массива условию, заданному в CB
+  const availableOffers = offersByType.find((x) => x.type === type).offers;
   const currentOffers = availableOffers.filter((x) => offers.some((y) => y === x.id));
 
 
   return `<li class="trip-events__item">
   <div class="event">
+  <button  class = "event__btn" type = "button">RELOAD</button>
     <time class="event__date" datetime=${humanizePointCurrentDatebyHtml(dateFrom)}>${humanizePointCurrentDate(dateFrom)}</time>
     <div class="event__type">
       <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
@@ -52,29 +50,36 @@ function createTripPointView(offersByType, point) {
 </li>`;
 }
 
-export default class TripPointView {
-  #element = null;
+export default class TripPointView extends AbstractView{
   #point = [];
   #offersByType = [];
+  #handleClick = null;
+  #handleReloadButtonClick = null;
 
-  constructor({ offersByType, point }) {
+  constructor({ offersByType, point, onEditDownClick, onReloadButtonClick }) {
+    super();
     this.#point = point;
     this.#offersByType = offersByType;
+    this.#handleClick = onEditDownClick; // в свойство nEditClick будет приходить  СВ(foo которая будет срабатывать на клике на кнопку вниз)
+    this.#handleReloadButtonClick = onReloadButtonClick;
+
+    this.element.querySelector('.event__rollup-btn').addEventListener('click', this.#editClickHandler);
+    this.element.querySelector('.event__btn').addEventListener('click', this.#reloadClickHandler);
+
+
   }
 
   get template() {
     return createTripPointView(this.#offersByType, this.#point);
   }
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
+  #editClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleClick(); //foo которая приходит снаружи
+  };
 
-    return this.#element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
+  #reloadClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleReloadButtonClick();
+  };
 }

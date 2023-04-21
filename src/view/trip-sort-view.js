@@ -1,9 +1,11 @@
-import { createElement } from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
+import { SortType } from '../constans.js';
+
 function createTripSortView() {
   return ` <form class="trip-events__trip-sort  trip-sort" action="#" method="get">
   <div class="trip-sort__item  trip-sort__item--day">
     <input id="sort-day" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-day" checked="">
-    <label class="trip-sort__btn" for="sort-day">Day</label>
+    <label class="trip-sort__btn" for="sort-day" data-sort-type ="${SortType.DAY}">Day</label>
   </div>
 
   <div class="trip-sort__item  trip-sort__item--event">
@@ -18,31 +20,34 @@ function createTripSortView() {
 
   <div class="trip-sort__item  trip-sort__item--price">
     <input id="sort-price" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-price">
-    <label class="trip-sort__btn" for="sort-price">Price</label>
+    <label class="trip-sort__btn" for="sort-price" data-sort-type ="${SortType.DAY}">Price</label>
   </div>
 
   <div class="trip-sort__item  trip-sort__item--offer">
     <input id="sort-offer" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-offer" disabled="">
     <label class="trip-sort__btn" for="sort-offer">Offers</label>
-  </div>
-</form>`;
+  </div>`;
 }
 
-export default class TripSortView {
-  #element = null;
+export default class TripSortView extends AbstractView {
+  #handleSortTypeChange = null;
+
+  constructor({onSortTypeChange}) {
+    super();
+    this.#handleSortTypeChange = onSortTypeChange;
+    this.element.addEventListener('click', this. #sortTypeChangeHandler);
+  }
 
   get template() {
     return createTripSortView();
   }
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
+  #sortTypeChangeHandler = (evt) => {
+    if(evt.target.tagName !== 'LABEL') {
+      return;
     }
-    return this.#element;
-  }
 
-  removeElement() {
-    this.#element = null;
-  }
+    evt.prevent.Default();
+    this.#handleSortTypeChange(evt.target.dataset.sortType);
+  };
 }

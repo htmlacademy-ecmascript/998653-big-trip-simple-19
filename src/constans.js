@@ -30,4 +30,20 @@ const PointTypeDescription = {
   [PointType.Restaurant]: 'Restaurant',
 };
 
-export { PointType, PointTypeDescription};
+const Filter = {
+  Everything: 'everything',
+  Future: 'future'
+};
+
+const FilterDescription = {
+  [Filter.Everything]: 'Everything',
+  [Filter.Future]: 'Future'
+};
+
+const SortType = {
+  DEFAULT: 'Default',
+  DAY: 'Day',
+  PRICE: 'Price',
+};
+
+export { PointType, PointTypeDescription, Filter, FilterDescription, SortType };

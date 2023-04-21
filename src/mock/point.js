@@ -2,6 +2,7 @@ import { getRandomArrayElement } from '../utils.js';
 import { getRandomInt } from '../utils.js';
 import { PointType } from '../constans.js';
 import dayjs from 'dayjs';
+import { nanoid } from 'nanoid';
 
 const POINTS_COUNT = 15;
 const CITIES = ['Chamonix', 'Geneva', 'Amsterdam', 'Helsinki', 'Oslo', 'Kopenhagen', 'Den Haag', 'Rotterdam', 'Saint Petersburg', 'Moscow', 'Sochi', 'Tokio', 'Kioto', 'Nagasaki', 'Hiroshima', 'Berlin', 'Munich', 'Frankfurt', 'Vien', 'Rome', 'Naples', 'Venice', 'Milan', 'Monaco', 'Paris', 'Barcelona', 'Valencia', 'Madrid'];
@@ -220,13 +221,13 @@ const getRandomType = () => {
   return PointType[randomTypeKey];
 };
 
-const getPoint = (index) => {
+const getPoint = () => {
   const type = getRandomType();
   const availableOffers = offersByType.find((x) => x.type === type).offers;
 
   const shuffledOffers = availableOffers.sort(() => 0.5 - Math.random()).slice(0, getRandomInt(0, availableOffers.length - 1)).map((x) => x.id);
   return ({
-    id: index + 1,
+    id: nanoid(),
     basePrice: getRandomInt(100, 2000),
     dateFrom: dayjs(),
     dateTo: dayjs().hour(3),
